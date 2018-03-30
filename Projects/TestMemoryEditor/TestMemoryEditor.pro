@@ -8,8 +8,17 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+CONFIG += c++14
+
 TARGET = TestMemoryEditor
 TEMPLATE = app
+
+win32: {
+    MOC_DIR = .MOC
+    OBJECTS_DIR = .OBJ
+    UI_DIR = .UI
+    DESTDIR = ../bin
+}
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
