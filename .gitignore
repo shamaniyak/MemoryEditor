@@ -18,3 +18,4 @@ build-MemoryManager-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug
 Projects/MemoryManager/Makefile
 Projects/TestMemoryEditor/Makefile
 *.exe
+Projects/MemoryEditorSubdirs/Makefile

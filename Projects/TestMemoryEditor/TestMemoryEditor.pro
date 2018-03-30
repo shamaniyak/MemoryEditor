@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+CONFIG += c++14
+QT       += core gui \
+            qml quick
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-CONFIG += c++14
 
 TARGET = TestMemoryEditor
 TEMPLATE = app
@@ -41,3 +41,6 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    main.qml
