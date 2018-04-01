@@ -6,7 +6,6 @@ DynamicLibrary {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
-    Depends { name: "Qt"; submodules: ["gui", "widgets"] }
 
     property bool putOverBin: false
     property string putOverBinSubdir: ""

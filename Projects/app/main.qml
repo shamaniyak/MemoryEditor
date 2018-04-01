@@ -1,10 +1,9 @@
 ﻿import QtQuick 2.9
-import QtQuick.Controls 1.4
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import MemoryManager 1.0
 
-Window {
+ApplicationWindow {
     visible: true
     width: 640
     height: 480
@@ -24,16 +23,10 @@ Window {
         memory: mem
     }
 
-    TreeView {
-        id: memTree
+    MemoryTreeView {
+        id: treeView
         anchors.fill: parent
         model: memModel
-
-        TableViewColumn {
-            title: "Name"
-            role: "display"
-            width: 200
-        }
 
         onClicked: {
             treeMenu.popup()

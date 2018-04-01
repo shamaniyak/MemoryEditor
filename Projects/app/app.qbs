@@ -2,7 +2,6 @@
 
 CppApplication {
     Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
-    Depends { name: "Qt"; submodules: ["gui", "widgets"] }
 
     // Additional import path used to resolve QML modules in Qt Creator's code model
     property pathList qmlImportPaths: ["../../bin/qml"]
