@@ -54,14 +54,17 @@ QModelIndex QMemoryModel::parent(const QModelIndex &child) const
 
 int QMemoryModel::rowCount(const QModelIndex &parent) const
 {
+  int count = 0;
   if(!mem_)
-    return 0;
+    return count;
 
   if (!parent.isValid())
-    return mem_->getME().count();
-
-  auto meP = getMeByIndex(parent);
-  return meP.count();
+    count = mem_->getME().count();
+  else {
+    auto meP = getMeByIndex(parent);
+    count = meP.count();
+  }
+  return count;
 }
 
 int QMemoryModel::columnCount(const QModelIndex &/*parent*/) const
@@ -238,6 +241,7 @@ void QMemoryModel::setMem(MemoryWrapper *mem)
   if(mem_) {
     //connect(mem_, &MemoryWrapper::on_change, this, &QMemoryModel::memory_change);
     connect(mem_, &MemoryWrapper::change, this, &QMemoryModel::onMemoryChange);
+    connect(mem_, &MemoryWrapper::destroyed, this, &QMemoryModel::onMemoryDestroed);
   }
 }
 
@@ -292,61 +296,6 @@ void QMemoryModel::updateMe(const MEWrapper &me)
   this->endInsertRows();
 }
 
-void QMemoryModel::memory_change(MEWrapper &me, EMemoryChange idMsg)
-{
-  if(!me)
-    return;
-
-  switch(idMsg)
-  {
-    case EMemoryChange::mcNone:
-      break;
-    case EMemoryChange::mcSelect:
-      break;
-
-    case EMemoryChange::mcAdd:
-    {
-      QModelIndex parent = getIndexByMe(me.parent());
-      int cnt = me.parent().count();
-      this->beginInsertRows(parent, cnt-1, cnt-1);
-      this->endInsertRows();
-      break;
-    }
-
-    case EMemoryChange::mcDel:
-    {
-      break;
-    }
-
-    case EMemoryChange::mcEditName:
-    {
-      auto mi = getIndexByMe(me);
-      emit dataChanged(mi, mi);
-      break;
-    }
-
-    case EMemoryChange::mcEditVal:
-      break;
-
-    case EMemoryChange::mcClear:
-    {
-      this->beginResetModel();
-      endResetModel();
-      break;
-    }
-    case EMemoryChange::mcAddFrom:
-    case EMemoryChange::mcUpdate:
-    {
-      updateMe(me);
-      break;
-    }
-
-    case mcMove:
-      updateMe(me.parent());
-      break;
-  }
-}
-
 void QMemoryModel::onMemoryChange(const ChangeEvent &event)
 {
   EMemoryChange idMsg = event.type;
@@ -372,7 +321,8 @@ void QMemoryModel::onMemoryChange(const ChangeEvent &event)
     {
       if(!event.parent)
         return;
-      auto index = getIndexByMe(event.parent);
+      //auto index = getIndexByMe(event.parent);
+      auto index = createIndex(event.row, 0, event.parent.getMe());
       this->beginRemoveRows(index, event.row, event.row);
       this->endRemoveRows();
       break;
@@ -462,6 +412,12 @@ void QMemoryModel::onHeaderChange(const MEWrapper &me, EMemoryChange idMsg)
       //updateMe(me->parent());
       break;
   }
+}
+
+void QMemoryModel::onMemoryDestroed(QObject *obj)
+{
+  if(obj == mem_)
+    mem_ = nullptr;
 }
 
 MemoryWrapper *QMemoryModel::getHeaderInfo() const

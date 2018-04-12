@@ -59,9 +59,9 @@ protected:
   void updateMe(const MEWrapper &me);
 
 private slots:
-  void memory_change(MEWrapper &me, EMemoryChange idMsg);
   void onMemoryChange(const ChangeEvent &event);
   void onHeaderChange(const MEWrapper &me, EMemoryChange idMsg);
+  void onMemoryDestroed(QObject * = nullptr);
 
 private:
   enum Columns

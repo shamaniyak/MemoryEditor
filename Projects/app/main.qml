@@ -27,39 +27,5 @@ ApplicationWindow {
         id: treeView
         anchors.fill: parent
         model: memModel
-
-        onClicked: {
-            treeMenu.popup()
-        }
-    }
-
-    Menu {
-        id: treeMenu
-
-        MenuItem {
-            id: menuItemAdd
-            action: addAction
-        }
-
-        MenuItem {
-            id: menuItemDel
-            action: delAction
-        }
-    }
-
-    Action {
-        id: addAction
-        text: qsTr("&Add")
-        onTriggered: {
-            mem.add(mem.selected, "new")
-        }
-    }
-
-    Action {
-        id: delAction
-        text: qsTr("&Del")
-        onTriggered: {
-            mem.del('new')
-        }
     }
 }
