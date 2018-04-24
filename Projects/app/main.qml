@@ -8,10 +8,12 @@ ApplicationWindow {
     width: 640
     height: 480
     title: qsTr("Memory Editor")
+    property string appDirPath
 
     Component.onCompleted: {
-        memModel.add(0, "1");
-        memModel.add(0, "2");
+        //console.log()
+        appDirPath = app.applicationDirPath()
+        memModel.open(appDirPath + "/memory.moi")
     }
 
     // memModel

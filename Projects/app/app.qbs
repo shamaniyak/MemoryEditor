@@ -27,6 +27,8 @@ CppApplication {
 
     files: [
         "main.cpp",
+        "myapp.cpp",
+        "myapp.h",
         "qml.qrc",
     ]
 

@@ -170,12 +170,17 @@ void MemoryWrapper::setAutosave(bool autosave)
 
 bool MemoryWrapper::open(const QString &fileName)
 {
-  if(!mem_->open(fileName))
-    return false;
+  bool result = false;
+  beginResetModel();
 
-  setSelected(getSelected());
+  result = mem_->open(fileName);
 
-  return true;
+  endResetModel();
+
+  if(result)
+    setSelected(getSelected());
+
+  return result;
 }
 
 bool MemoryWrapper::save()
