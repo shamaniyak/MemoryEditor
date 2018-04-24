@@ -9,8 +9,6 @@ void MemoryManagerPlugin::registerTypes(const char *uri)
 {
     // @uri memorymanagerplugins
     qmlRegisterType<MemoryManager>(uri, 1, 0, "MemoryManager");
-
-    qmlRegisterType<MemoryWrapper>(uri, 1, 0, "Memory");
     qmlRegisterType<QMemoryModel>(uri, 1, 0, "MemoryModel");
 }
 

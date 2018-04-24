@@ -10,22 +10,77 @@ ApplicationWindow {
     title: qsTr("Memory Editor")
 
     Component.onCompleted: {
-        mem.add(0, "1");
-        mem.add(0, "2");
+        memModel.add(0, "1");
+        memModel.add(0, "2");
     }
 
-    Memory {
-        id: mem
-    }
-
+    // memModel
     MemoryModel {
         id: memModel
-        memory: mem
     }
 
+    // treeView
     MemoryTreeView {
         id: treeView
         anchors.fill: parent
         model: memModel
+    }
+
+    // mouseArea
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onPressed: {
+            if(mouse.button == Qt.RightButton)
+                treeMenu.popup()
+            mouse.accepted = false
+        }
+    }
+
+    // treeMenu
+    Menu {
+        id: treeMenu
+
+        MenuItem {
+            id: menuItemAdd
+            action: addAction
+            implicitHeight: 25
+        }
+
+        MenuItem {
+            id: menuItemDel
+            action: removeAction
+            implicitHeight: 25
+        }
+
+        MenuItem {
+            action: clearAction
+            implicitHeight: 25
+        }
+    }
+
+    // addAction
+    Action {
+        id: addAction
+        text: qsTr("&Add")
+        onTriggered: {
+            memModel.add(memModel.selected, "new")
+        }
+    }
+    // removeAction
+    Action {
+        id: removeAction
+        text: qsTr("&Del")
+        onTriggered: {
+            memModel.del('new')
+        }
+    }
+    // clearAction
+    Action {
+        id: clearAction
+        text: qsTr("&Clear")
+        onTriggered: {
+            memModel.clear()
+        }
     }
 }
