@@ -83,7 +83,7 @@ public:
   MEWrapper getSelected();
 
   QModelIndex getIndexByMe(const MEWrapper &me);
-  MEWrapper getMeByIndex(const QModelIndex &index) const;
+  Q_INVOKABLE MEWrapper getMeByIndex(const QModelIndex &index) const;
 
 signals:
   void change(const ChangeEvent &ev);

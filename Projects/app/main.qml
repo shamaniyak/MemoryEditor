@@ -1,6 +1,7 @@
-﻿import QtQuick 2.9
+﻿import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
+import QtQuick.Dialogs 1.3
 import MemoryManager 1.0
 
 ApplicationWindow {
@@ -16,6 +17,13 @@ ApplicationWindow {
         memModel.open(appDirPath + "/memory.moi")
     }
 
+    onClosing: {
+        if(memModel.changed()) {
+            close.accepted = false
+            messageDialog.open()
+        }
+    }
+
     // memModel
     MemoryModel {
         id: memModel
@@ -27,6 +35,21 @@ ApplicationWindow {
         anchors.fill: parent
         model: memModel
     }
+
+    MessageDialog {
+          id: messageDialog
+          text: "The memory has been modified."
+          informativeText: "Do you want to save your changes?"
+          standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
+          onAccepted: {
+              if(memModel.save())
+                  console.log("Memory saved.")
+              Qt.quit()
+          }
+          onDiscard: {
+              Qt.quit()
+          }
+      }
 
     // mouseArea
     MouseArea {
@@ -66,7 +89,8 @@ ApplicationWindow {
         id: addAction
         text: qsTr("&Add")
         onTriggered: {
-            memModel.add(memModel.selected, "new")
+            var me = memModel.getMeByIndex(treeView.currentIndex)
+            memModel.add(me, "new")
         }
     }
     // removeAction
@@ -74,7 +98,8 @@ ApplicationWindow {
         id: removeAction
         text: qsTr("&Del")
         onTriggered: {
-            memModel.del('new')
+            var me = memModel.getMeByIndex(treeView.currentIndex)
+            memModel.deleteMe(me)
         }
     }
     // clearAction
