@@ -54,17 +54,14 @@ QModelIndex QMemoryModel::parent(const QModelIndex &child) const
 
 int QMemoryModel::rowCount(const QModelIndex &parent) const
 {
-  int count = 0;
   if(!mem_)
-    return count;
+    return 0;
 
   if (!parent.isValid())
-    count = mem_->getME().count();
-  else {
-    auto meP = getMeByIndex(parent);
-    count = meP.count();
-  }
-  return count;
+    return mem_->getME().count();
+
+  auto meP = getMeByIndex(parent);
+  return meP.count();
 }
 
 int QMemoryModel::columnCount(const QModelIndex &/*parent*/) const
@@ -498,7 +495,7 @@ bool QMemoryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
     auto me1 = mem_->add(meParent, me.name());
     if(me1) {
       me1.setVal(me.val());
-      mem_->addFrom1(me1.getMe(), &me, true);
+      mem_->addFrom(me1, MEWrapper(&me), true);
     }
   }
 

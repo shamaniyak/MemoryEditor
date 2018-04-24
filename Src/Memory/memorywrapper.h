@@ -30,6 +30,8 @@ struct ChangeEvent
 private:
   Q_GADGET
   Q_PROPERTY(int row MEMBER row)
+  Q_PROPERTY(int type READ getType)
+  Q_PROPERTY(QString path MEMBER path)
 public:
   EMemoryChange type = mcNone;
   MEWrapper me;
@@ -40,8 +42,9 @@ public:
   int last = 0;
   QString prevName;
   QVariant prevVal;
+  QString path;
 
-
+  int getType() {return type;}
 };
 
 class MemoryWrapper : public QObject//QMemoryModel
@@ -58,6 +61,7 @@ public:
   explicit MemoryWrapper(QObject *parent = 0);
   ~MemoryWrapper();
 
+  // Корневой элемент
   MEWrapper getME();
 
   MEWrapper CreateMEW(Memory::TME *me);
@@ -78,9 +82,9 @@ public:
   MEWrapper getSelected();
 
 signals:
-  on_change(const MEWrapper &me, EMemoryChange idMsg);
-  change(const ChangeEvent &ev);
-  change1(const Memory::TME &ev);
+  void on_change(const MEWrapper &me, EMemoryChange idMsg);
+  void change(const ChangeEvent &ev);
+  void change1(const Memory::TME &ev);
 
 public slots:
 
@@ -106,6 +110,7 @@ public slots:
 
   void clear();
   void clearMe(const MEWrapper &me);
+  //void deleteChildren
 
   bool move(const MEWrapper &me, const MEWrapper &parent, int pos);
 
@@ -121,13 +126,8 @@ protected:
   void clearDeleted();
   void clearMeWrappers();
 
-  bool addFrom1(Memory::TME *parent, Memory::TME *mefrom, bool recurs, bool checkExist = false);
-  void deleteMe1(const MEWrapper &me);
   void clearR(Memory::TME *me);
-  void clearMe1(const MEWrapper &me);
-  bool move1(const MEWrapper &me, const MEWrapper &parent, int pos);
-  void setVal1(const MEWrapper &me, const QVariant &val);
-  void setName1(const MEWrapper &me, const QString &name);
+  void clearME1(Memory::TME *me);
 
 private:
   typedef QMap<Memory::TME*, MEWrapper> t_mapMeWrappers;
