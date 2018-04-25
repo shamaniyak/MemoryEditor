@@ -1,8 +1,15 @@
 ﻿import qbs 1.0
 import qbs.FileInfo
 
-DynamicLibrary {
+AndroidApk {
     name: "MemoryManager"
+    packageName: "ru.shamaniyak.android.memorymanager"
+
+    property string sourcesPrefix: project.globalPath
+
+    resourcesDir: sourcesPrefix + "/res"
+    sourcesDir: sourcesPrefix + "/java"
+    manifestFile: sourcesPrefix + "/platform-specific/android/AndroidManifest.xml"
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
@@ -22,19 +29,19 @@ DynamicLibrary {
     //cpp.staticLibraries: project.buildWithEasyProfiler ? staticLibraries.concat(["easy_profiler"]) : staticLibraries
     //cpp.libraryPaths: project.buildWithEasyProfiler ? libraryPaths.concat(FileInfo.joinPaths(project.globalProjectsPath,"3rdparty","easy_profiler","lib","win64")) : libraryPaths
     //cpp.optimization: project.generatePDB ? "none" : "fast"
-    Group {
-        fileTagsFilter: ["dynamiclibrary"]
-        qbs.install: true
-        qbs.installDir: FileInfo.relativePath(qbs.installRoot, FileInfo.joinPaths(project.globalBinPath, product.putOverBinSubdir))
-    }
+//    Group {
+//        fileTagsFilter: ["dynamiclibrary"]
+//        qbs.install: true
+//        qbs.installDir: FileInfo.relativePath(qbs.installRoot, FileInfo.joinPaths(project.globalBinPath, product.putOverBinSubdir))
+//    }
 
-    Group {
-        name: "qmldir"
-        files: FileInfo.joinPaths(project.sourceDirectory,product.prefix,product.name,"qmldir")
-        //qbs.installDir: FileInfo.joinPaths("qml",product.prefix,product.name)
-        qbs.installDir: FileInfo.relativePath(qbs.installRoot, FileInfo.joinPaths(project.globalBinPath, product.putOverBinSubdir))
-        qbs.install: true
-    }
+//    Group {
+//        name: "qmldir"
+//        files: FileInfo.joinPaths(project.sourceDirectory,product.prefix,product.name,"qmldir")
+//        //qbs.installDir: FileInfo.joinPaths("qml",product.prefix,product.name)
+//        qbs.installDir: FileInfo.relativePath(qbs.installRoot, FileInfo.joinPaths(project.globalBinPath, product.putOverBinSubdir))
+//        qbs.install: true
+//    }
 
     Group {
         name: "src"

@@ -25,3 +25,5 @@ Projects/MemoryEditor.qbs.user.0598a8a
 build-MemoryEditor-Desktop_Qt_5_10_1_MinGW_32bit2-Release
 *.o
 *.moi
+*build*
+*.png
