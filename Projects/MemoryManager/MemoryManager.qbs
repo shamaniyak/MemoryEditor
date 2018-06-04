@@ -5,7 +5,7 @@ DynamicLibrary {
     name: "MemoryManager"
 
     Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
+    Depends { name: "Qt"; submodules: ["core", "widgets", "quick", "qml"] }
 
     property string putOverBinSubdir: "qml/MemoryManager"
     property string prefix: ""
@@ -41,25 +41,10 @@ DynamicLibrary {
         files: [
             "*.cpp",
             "*.h",
-            "../../Src/Memory/elementsmanager.cpp",
-            "../../Src/Memory/elementsmanager.h",
-            "../../Src/Memory/memorycompareproxymodel.cpp",
-            "../../Src/Memory/memorycompareproxymodel.h",
-            "../../Src/Memory/memorywrapper.cpp",
-            "../../Src/Memory/memorywrapper.h",
-            "../../Src/Memory/mewrapper.cpp",
-            "../../Src/Memory/mewrapper.h",
-            "../../Src/Memory/qmemorymodel.cpp",
-            "../../Src/Memory/qmemorymodel.h",
-            "../../Src/Memory/qmemoryselectionmodel.cpp",
-            "../../Src/Memory/qmemoryselectionmodel.h",
-            "../../Src/Memory/tme.cpp",
-            "../../Src/Memory/tme.h",
-            "../../Src/Memory/tmemory.cpp",
-            "../../Src/Memory/tmemory.h",
-            "../../Src/Memory/tmevalue.cpp",
-            "../../Src/Memory/tmevalue.h",
+            "../../Src/Memory/*.cpp",
+            "../../Src/Memory/*.h",
         ]
+        excludeFiles: "../../Src/Memory/MemoryManager.*"
     }
 
 }

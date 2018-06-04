@@ -1,14 +1,15 @@
 ﻿import qbs
+import qbs.FileInfo
 
 CppApplication {
     Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
 
     // Additional import path used to resolve QML modules in Qt Creator's code model
-    property pathList qmlImportPaths: ["../../bin/qml"]
+    property pathList qmlImportPaths: [project.globalModulesPath, "../../bin/qml/"]
 
     cpp.cxxLanguageVersion: "c++11"
 
-    destinationDirectory: project.globalBinPath
+    //destinationDirectory: project.globalBinPath
 
     cpp.includePaths: [project.globalIncludePath]
 
@@ -35,5 +36,6 @@ CppApplication {
     Group {     // Properties for the produced executable
         fileTagsFilter: "application"
         qbs.install: true
+        qbs.installDir: "/bin"
     }
 }

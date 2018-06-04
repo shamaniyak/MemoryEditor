@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<MyApp>("MyApp", 1, 0, "MyApp", "Can't creat MyApp");
 
     QQmlApplicationEngine engine;
-    engine.addImportPath("./qml");
+    engine.addImportPath(qApp->applicationDirPath() + "/qml");
     engine.rootContext()->setContextProperty("app", &myApp);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
