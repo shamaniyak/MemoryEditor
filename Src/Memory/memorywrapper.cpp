@@ -1,3 +1,21 @@
+/****************************************************************************
+**
+** Copyright (C) 2015-2018 Aleksandr Abramov
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+** http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+**
+****************************************************************************/
+
 #include "memorywrapper.h"
 #include "tmemory.h"
 #include "memorymanager.h"
@@ -340,14 +358,22 @@ void MemoryWrapper::clear()
 
 void MemoryWrapper::clearMe(const MEWrapper &me)
 {
-  if(me) {
-    beginResetModel();
+  if(me && me.count() > 0) {
+    auto index = getIndexByMe(me);
+    beginRemoveRows(index, 0, me.count()-1);
 
     clearME1(me.getMe());
 
-    endResetModel();
+    endRemoveRows();
 
-    doChange(me, EMemoryChange::mcClear);
+    ChangeEvent ev;
+    ev.type = EMemoryChange::mcClear;
+    ev.me = me;
+    ev.parent = me.parent();
+    ev.row = me.getIndex();
+    ev.count = me.count();
+    ev.path = me.getPath();
+    doChange(ev);
   }
 }
 
@@ -374,10 +400,17 @@ bool MemoryWrapper::move(const MEWrapper &me, const MEWrapper &parent, int pos)
     // запрещаем перенос из одного владельца в другого
     if(me.parent() != parent)
       return false;
-    auto source = getIndexByMe(parent);
-    beginMoveRows(source, me.getIndex(), me.getIndex(), source, pos);
-    bool ok = me.getMe()->move_to(parent.getMe(), pos);
+    if(pos < 0 || pos >= parent.count())
+      return false;
 
+    auto source = getIndexByMe(parent);
+//    if(!source.isValid())
+//      return false;
+    int row = me.getIndex();
+    int destRow = pos > row ? pos + 1: pos;
+    beginMoveRows(source, row, row, source, destRow);
+
+    bool ok = me.getMe()->move_to(parent.getMe(), pos);
 
     endMoveRows();
 

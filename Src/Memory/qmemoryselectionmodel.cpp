@@ -1,3 +1,21 @@
+/****************************************************************************
+**
+** Copyright (C) 2015-2018 Aleksandr Abramov
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+** http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+**
+****************************************************************************/
+
 #include "qmemoryselectionmodel.h"
 #include "qmemorymodel.h"
 
@@ -40,7 +58,9 @@ void QMemorySelectionModel::setMem(MemoryWrapper *mem)
 
   if(mem_)
   {
+    setModel(mem_);
     setSelected(mem_->getSelected());
+    connect(mem_, &MemoryWrapper::change, this, &QMemorySelectionModel::onMemoryChanged);
   }
 }
 
@@ -66,21 +86,23 @@ void QMemorySelectionModel::on_selectionChanged(const QItemSelection &selected, 
   }
 }
 
+void QMemorySelectionModel::onMemoryChanged(const ChangeEvent &ev)
+{
+  if(ev.type == mcSelect) {
+    setSelected(ev.me);
+  }
+}
+
 void QMemorySelectionModel::setSelected(const MEWrapper &me)
 {
   QModelIndex index = getIndexByMe(me);
-//  auto me1 = static_cast<MEWrapper*>(index.internalPointer());
-//  auto name = me->name();
-//  auto name1 = me1->name();
 
   setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
-  //select(index,
-  //       QItemSelectionModel::ClearAndSelect);
 }
 
 QModelIndex QMemorySelectionModel::getIndexByMe(const MEWrapper &me)
 {
-  auto m = qobject_cast<QMemoryModel*>(model());
+  auto m = qobject_cast<MemoryWrapper*>(model());
   if(m)
   {
     return m->getIndexByMe(me);
@@ -90,7 +112,7 @@ QModelIndex QMemorySelectionModel::getIndexByMe(const MEWrapper &me)
 
 MEWrapper QMemorySelectionModel::getMeByIndex(const QModelIndex &index)
 {
-  auto m = qobject_cast<QMemoryModel*>(model());
+  auto m = qobject_cast<MemoryWrapper*>(model());
   if(m)
   {
     return m->getMeByIndex(index);

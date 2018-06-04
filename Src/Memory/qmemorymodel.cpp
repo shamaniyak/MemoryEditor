@@ -1,3 +1,21 @@
+/****************************************************************************
+**
+** Copyright (C) 2015-2018 Aleksandr Abramov
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+** http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+**
+****************************************************************************/
+
 #include "qmemorymodel.h"
 
 QMemoryModel::QMemoryModel(QObject *parent) : MemoryWrapper(parent)
@@ -6,6 +24,17 @@ QMemoryModel::QMemoryModel(QObject *parent) : MemoryWrapper(parent)
 
 QMemoryModel::~QMemoryModel()
 {
+}
+
+int QMemoryModel::getColumnCount() const
+{
+  return columnCount_;
+}
+
+void QMemoryModel::setColumnCount(int columnCount)
+{
+  columnCount_ = columnCount;
+  emit headerDataChanged(Qt::Horizontal, 0, columnCount_-1);
 }
 
 QModelIndex QMemoryModel::index(int row, int column, const QModelIndex &parent) const
@@ -50,9 +79,9 @@ int QMemoryModel::rowCount(const QModelIndex &parent) const
   return meP.count();
 }
 
-int QMemoryModel::columnCount(const QModelIndex &/*parent*/) const
+int QMemoryModel::columnCount(const QModelIndex &parent) const
 {
-  return 1;
+  return columnCount_;
 }
 
 QVariant QMemoryModel::data(const QModelIndex &index, int role) const
@@ -62,10 +91,14 @@ QVariant QMemoryModel::data(const QModelIndex &index, int role) const
     return var;
   }
 
-  if(role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::ToolTipRole)
+  if(role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::ToolTipRole && ValueRole != role)
     return var;
 
   auto me = getMeByIndex(index);
+
+  if(ValueRole == role) {
+    return me.val();
+  }
 
   switch (index.column()) {
     case NameColumn:
@@ -145,13 +178,24 @@ bool QMemoryModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 QVariant QMemoryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  const QStringList headers = {tr("Name")};//, tr("Value"), tr("Path"), tr("Type")};
-  int cnt = 1;
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < cnt)
+  //return inherited::headerData(section, orientation, role);
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount_)
   {
     return headers[section];
   }
   return QVariant();
+}
+
+bool QMemoryModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+{
+  //inherited::setHeaderData(section, orientation, value, role);
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount_)
+  {
+    headers[section] = value.toString();
+    emit headerDataChanged(orientation, section, section);
+    return true;
+  }
+  return false;
 }
 
 bool QMemoryModel::canFetchMore(const QModelIndex &parent) const
@@ -209,6 +253,7 @@ Qt::DropActions QMemoryModel::supportedDropActions() const
 QHash<int, QByteArray> QMemoryModel::roleNames() const
 {
   QHash<int, QByteArray> result = QAbstractItemModel::roleNames();
+  result[ValueRole] = "value";
   return result;
 }
 
@@ -263,7 +308,7 @@ bool QMemoryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
 
   int beginRow;
 
-  if (row != -1)
+  if (row > -1)
     beginRow = row;
   else if (parent.isValid())
     beginRow = rowCount(parent);
@@ -284,6 +329,7 @@ bool QMemoryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
     auto me1 = add(meParent, me.name());
     if(me1) {
       me1.setVal(me.val());
+      move(me1, meParent, beginRow);
       addFrom(me1, MEWrapper(&me), true);
     }
   }
