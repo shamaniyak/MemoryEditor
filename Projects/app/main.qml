@@ -5,109 +5,52 @@ import QtQuick.Dialogs 1.3
 import MemoryManager 1.0
 
 ApplicationWindow {
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Memory Editor")
-    property string appDirPath
+	visible: true
+	width: 640
+	height: 480
+	title: qsTr("Memory Editor")
+	property string appDirPath
+	menuBar: MainMenu {
 
-    Component.onCompleted: {
-        //console.log()
-        appDirPath = app.applicationDirPath()
-        memModel.open(appDirPath + "/memory.moi")
-    }
+	}
 
-    onClosing: {
-        if(memModel.changed()) {
-            close.accepted = false
-            messageDialog.open()
-        }
-    }
+	// Модель
+	MemoryModel {
+		id: memModel
+	}
 
-    // memModel
-    MemoryModel {
-        id: memModel
-    }
+	// Редактор
+	MemoryEditor {
+		id: editor
+		memModel: memModel
+	}
 
-    // treeView
-    MemoryTreeView {
-        id: treeView
-        anchors.fill: parent
-        model: memModel
-    }
+	// Диалог сохранения
+	MessageDialog {
+		id: messageDialog
+		text: "The memory has been modified."
+		informativeText: "Do you want to save your changes?"
+		standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
+		onAccepted: {
+			if(memModel.save())
+				console.log("Memory saved.")
+			Qt.quit()
+		}
+		onDiscard: {
+			Qt.quit()
+		}
+	}
 
-    MessageDialog {
-          id: messageDialog
-          text: "The memory has been modified."
-          informativeText: "Do you want to save your changes?"
-          standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
-          onAccepted: {
-              if(memModel.save())
-                  console.log("Memory saved.")
-              Qt.quit()
-          }
-          onDiscard: {
-              Qt.quit()
-          }
-      }
+	Component.onCompleted: {
+		//console.log()
+		appDirPath = app.applicationDirPath()
+		memModel.open(appDirPath + "/memory.moi")
+	}
 
-    // mouseArea
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onPressed: {
-            if(mouse.button == Qt.RightButton)
-                treeMenu.popup()
-            mouse.accepted = false
-        }
-    }
-
-    // treeMenu
-    Menu {
-        id: treeMenu
-
-        MenuItem {
-            id: menuItemAdd
-            action: addAction
-            implicitHeight: 25
-        }
-
-        MenuItem {
-            id: menuItemDel
-            action: removeAction
-            implicitHeight: 25
-        }
-
-        MenuItem {
-            action: clearAction
-            implicitHeight: 25
-        }
-    }
-
-    // addAction
-    Action {
-        id: addAction
-        text: qsTr("&Add")
-        onTriggered: {
-            var me = memModel.getMeByIndex(treeView.currentIndex)
-            memModel.add(me, "new")
-        }
-    }
-    // removeAction
-    Action {
-        id: removeAction
-        text: qsTr("&Del")
-        onTriggered: {
-            var me = memModel.getMeByIndex(treeView.currentIndex)
-            memModel.deleteMe(me)
-        }
-    }
-    // clearAction
-    Action {
-        id: clearAction
-        text: qsTr("&Clear")
-        onTriggered: {
-            memModel.clear()
-        }
-    }
+	onClosing: {
+		if(memModel.changed()) {
+			close.accepted = false
+			messageDialog.open()
+		}
+	}
 }

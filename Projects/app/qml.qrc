@@ -2,5 +2,9 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MemoryTreeView.qml</file>
+        <file>MemoryEditor.qml</file>
+        <file>TreePopupMenu.qml</file>
+        <file>MemoryEditorActions.qml</file>
+        <file>MainMenu.qml</file>
     </qresource>
 </RCC>
