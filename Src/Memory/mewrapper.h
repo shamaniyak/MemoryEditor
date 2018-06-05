@@ -74,7 +74,7 @@ public:
 
   int getIndex() const;
 
-  bool isNull() const;
+  Q_INVOKABLE bool isNull() const;
 
   explicit operator bool() const { return !isNull(); }
   bool operator !() const { return isNull(); }

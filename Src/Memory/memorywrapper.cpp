@@ -282,6 +282,7 @@ void MemoryWrapper::setSelected(const MEWrapper &me)
   if(mem_->getSelected() != me.me_) {
     mem_->setSelected(me.me_);
 
+    emit selectedChanged();
     doChange(me, EMemoryChange::mcSelect);
   }
 }

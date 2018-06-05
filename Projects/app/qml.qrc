@@ -6,5 +6,6 @@
         <file>TreePopupMenu.qml</file>
         <file>MemoryEditorActions.qml</file>
         <file>MainMenu.qml</file>
+        <file>MemoryElementEditor.qml</file>
     </qresource>
 </RCC>

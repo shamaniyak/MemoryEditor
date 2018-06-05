@@ -71,7 +71,7 @@ class MemoryWrapper : public QAbstractItemModel
   Q_OBJECT
   Q_PROPERTY(MEWrapper me READ getME)
   Q_PROPERTY(QString filePath READ getFilePath WRITE setFilePath)
-  Q_PROPERTY(MEWrapper selected READ getSelected WRITE setSelected)
+  Q_PROPERTY(MEWrapper selected READ getSelected WRITE setSelected NOTIFY selectedChanged)
   Q_PROPERTY(bool canChange READ getCanChange WRITE setCanChange)
   Q_PROPERTY(bool autosave READ getAutosave WRITE setAutosave)
 
@@ -105,6 +105,7 @@ public:
 
 signals:
   void change(const ChangeEvent &ev);
+  void selectedChanged();
 
 public slots:
 

@@ -1,4 +1,5 @@
-﻿import QtQuick 2.0
+﻿import QtQuick 2.10
+import QtQuick.Layouts 1.3
 
 Item {
 	id: editor
@@ -6,25 +7,43 @@ Item {
 	property var memModel
 	readonly property var actions: meActions
 
-	// Вид для модели
-	MemoryTreeView {
-		id: treeView
+	GridLayout {
 		anchors.fill: parent
-		model: editor.memModel
-		// Контекстное меню для дерева
-		treeMenu: TreePopupMenu {
-			id: treeMenu
-			actions: MemoryEditorActions {
-				id: meActions
-				memModel: editor.memModel
-				treeView: treeView
+		columns: 2
+		//rows: 1
+		// Вид для модели
+		MemoryTreeView {
+			id: treeView
+			model: editor.memModel
+			Layout.fillHeight: true
+			// Контекстное меню для дерева
+			treeMenu: TreePopupMenu {
+				id: treeMenu
+				actions: MemoryEditorActions {
+					id: meActions
+					memModel: editor.memModel
+					treeView: treeView
+				}
+			}
+
+			onNameChanged: {
+				var me = model.getMeByIndex(index)
+				if(me)
+					me.name = newName
+			}
+
+			onClicked: {
+				var me = model.getMeByIndex(index)
+				model.selected = me
 			}
 		}
 
-		onNameChanged: {
-			var me = model.getMeByIndex(index)
-			if(me)
-				me.name = newName
+		// Редактор значения элемента
+		MemoryElementEditor {
+			id: meEditor
+			memModel: editor.memModel
+			Layout.fillHeight: true
+			Layout.fillWidth: true
 		}
 	}
 }
