@@ -2,7 +2,7 @@
 import QtQuick.Controls 2.3
 
 MenuBar {
-	property var actions
+	property var editorActions
 
 	Menu {
 		id: menu
@@ -15,7 +15,14 @@ MenuBar {
 		Action { text: qsTr("&Quit") }
 	}
 
-	onActionsChanged: {
+	Menu {
+		id: editorMenu
+		title: qsTr("&Edit")
+	}
 
+	onEditorActionsChanged: {
+		editorMenu.addAction(editorActions.addAction)
+		editorMenu.addAction(editorActions.removeAction)
+		editorMenu.addAction(editorActions.clearAction)
 	}
 }

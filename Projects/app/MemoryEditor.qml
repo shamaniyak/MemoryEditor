@@ -4,10 +4,7 @@ Item {
 	id: editor
 	anchors.fill: parent
 	property var memModel
-
-	function getActions() {
-		return meActions
-	}
+	readonly property var actions: meActions
 
 	// Вид для модели
 	MemoryTreeView {

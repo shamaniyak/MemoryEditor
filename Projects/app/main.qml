@@ -11,7 +11,7 @@ ApplicationWindow {
 	title: qsTr("Memory Editor")
 	property string appDirPath
 	menuBar: MainMenu {
-
+		editorActions: editor.actions
 	}
 
 	// Модель
