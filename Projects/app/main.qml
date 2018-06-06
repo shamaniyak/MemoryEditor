@@ -5,13 +5,21 @@ import QtQuick.Dialogs 1.3
 import MemoryManager 1.0
 
 ApplicationWindow {
+	id: mainWindow
 	visible: true
 	width: 640
 	height: 480
 	title: qsTr("Memory Editor")
 	property string appDirPath
 	menuBar: MainMenu {
-		editorActions: editor.actions
+		actionsFile: fileActions
+		actionsEditor: editor.actions
+	}
+
+	FileActions {
+		id: fileActions
+		memModel: memModel
+		mainWindow: mainWindow
 	}
 
 	// Модель

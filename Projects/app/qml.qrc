@@ -7,5 +7,6 @@
         <file>MemoryEditorActions.qml</file>
         <file>MainMenu.qml</file>
         <file>MemoryElementEditor.qml</file>
+        <file>FileActions.qml</file>
     </qresource>
 </RCC>

@@ -2,27 +2,25 @@
 import QtQuick.Controls 2.3
 
 MenuBar {
-	property var editorActions
+	property var actionsFile
+	property var actionsEditor
 
 	Menu {
-		id: menu
+		id: fileMenu
 		title: qsTr("&File")
-		Action { text: qsTr("&New...") }
-		Action { text: qsTr("&Open...") }
-		Action { text: qsTr("&Save") }
-		Action { text: qsTr("Save &As...") }
+		MenuItem { text: qsTr("&New..."); action: actionsFile.actionNew }
+		MenuItem { text: qsTr("&Open..."); action: actionsFile.actionOpen }
+		MenuItem { text: qsTr("&Save"); action: actionsFile.actionSave }
+		MenuItem { text: qsTr("Save &As..."); action: actionsFile.actionSaveAs }
 		MenuSeparator { }
-		Action { text: qsTr("&Quit") }
+		MenuItem { text: qsTr("&Quit"); action: actionsFile.actionQuit }
 	}
 
 	Menu {
 		id: editorMenu
 		title: qsTr("&Edit")
-	}
-
-	onEditorActionsChanged: {
-		editorMenu.addAction(editorActions.addAction)
-		editorMenu.addAction(editorActions.removeAction)
-		editorMenu.addAction(editorActions.clearAction)
+		MenuItem { action: actionsEditor.addAction }
+		MenuItem { action: actionsEditor.removeAction }
+		MenuItem { action: actionsEditor.clearAction }
 	}
 }
