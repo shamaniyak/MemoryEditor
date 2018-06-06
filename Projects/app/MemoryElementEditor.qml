@@ -8,7 +8,7 @@ Item {
 	TextArea {
 		id: edit
 		anchors.fill: parent
-		placeholderText: "Input value here"
+		placeholderText: qsTr("Input value here")
 
 		onTextChanged: {
 			if(selected)
@@ -17,6 +17,7 @@ Item {
 	}
 
 	onSelectedChanged: {
-		edit.text = selected ? selected.val : ""
+		console.log(selected)
+		edit.text = selected ? selected.val ? selected.val : "" : ""
 	}
 }
