@@ -103,7 +103,7 @@ void MEWrapper::setVal(const QVariant &val)
 QString MEWrapper::getPath() const
 {
   if(isNull())
-    return "";
+    return QString();
   return me_->getPath();
 }
 

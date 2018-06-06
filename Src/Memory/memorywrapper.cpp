@@ -353,8 +353,9 @@ void MemoryWrapper::doChange(const ChangeEvent &ev)
 
 void MemoryWrapper::clear()
 {
-  setSelected(getME());
+  getME().setVal(QVariant());
   clearMe(getME());
+  setSelected(getME());
 }
 
 void MemoryWrapper::clearMe(const MEWrapper &me)
