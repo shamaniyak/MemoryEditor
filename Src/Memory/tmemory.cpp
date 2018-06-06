@@ -213,6 +213,8 @@ QString TMemory::getFilePath() const
 void TMemory::setFilePath(const QString &path)
 {
   file_path_ = path;
+  if(backup_)
+    backup_->init();
 }
 
 QStringList &TMemory::words()
@@ -455,10 +457,13 @@ bool TMemory::moveElement(TME *parent, TME *me, int idx)
 bool TMemory::open(const QString &fileName)
 {
   bool res = false;
-  if(getChanged() && autosave_) {
-    res = save();
-    if(!res)
-      return res;//не сохранено почему то
+  if(getChanged()) {
+    setChanged(false);
+    if(autosave_) {
+      res = save();
+      if(!res)
+        return res;//не сохранено почему то
+    }
   }
 
   file_path_ = fileName;
@@ -582,31 +587,8 @@ bool TMemory::loadMemory()
 
 void TMemory::saveBackup()
 {
-//  if(!backup_.get())
-//    backup_ = std::make_shared<Backup>(this);
-
   if(backup_.get())
     backup_->save();
-
-//  QFile file(file_path_);
-//  if(!file.exists())
-//    return;
-
-//  QFileInfo fileInfo(file);
-//  QString name = fileInfo.fileName();
-//  QString path = fileInfo.absolutePath();
-//  path += "/bkp/";
-
-//  QDir dir(path);
-//  if(!dir.exists())
-//    if(!dir.mkdir(path))
-//      return;
-
-//  // добавим дату и время к имени
-//  QDateTime dt = QDateTime::currentDateTime();
-//  QString new_fn = path + name + dt.toString("yyyy.MM.dd hh.mm.ss") + ".moi";
-
-//  QFile::copy(file_path_, new_fn);
 }
 
 Backup::Backup(TMemory *m) : mem_(m)
@@ -691,6 +673,7 @@ bool Backup::canRedo()
 
 void Backup::setPathAndName()
 {
+  path_ = QString();
   if(!mem_)
     return;
 
