@@ -2,40 +2,40 @@
 import qbs.FileInfo
 
 CppApplication {
-    Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
+	Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
 
-    // Additional import path used to resolve QML modules in Qt Creator's code model
-    property pathList qmlImportPaths: [project.globalModulesPath, "../../bin/qml/"]
+	// Additional import path used to resolve QML modules in Qt Creator's code model
+	property pathList qmlImportPaths: [project.globalModulesPath, "../../bin/qml/"]
 
-    cpp.cxxLanguageVersion: "c++11"
+	cpp.cxxLanguageVersion: "c++11"
 
-    //destinationDirectory: project.globalBinPath
+	//destinationDirectory: project.globalBinPath
 
-    cpp.includePaths: [project.globalIncludePath]
+	cpp.includePaths: [project.globalIncludePath]
 
-    cpp.defines: [
-        // The following define makes your compiler emit warnings if you use
-        // any feature of Qt which as been marked deprecated (the exact warnings
-        // depend on your compiler). Please consult the documentation of the
-        // deprecated API in order to know how to port your code away from it.
-        "QT_DEPRECATED_WARNINGS",
+	cpp.defines: [
+		// The following define makes your compiler emit warnings if you use
+		// any feature of Qt which as been marked deprecated (the exact warnings
+		// depend on your compiler). Please consult the documentation of the
+		// deprecated API in order to know how to port your code away from it.
+		"QT_DEPRECATED_WARNINGS",
 
-        // You can also make your code fail to compile if you use deprecated APIs.
-        // In order to do so, uncomment the following line.
-        // You can also select to disable deprecated APIs only up to a certain version of Qt.
-        //"QT_DISABLE_DEPRECATED_BEFORE=0x060000" // disables all the APIs deprecated before Qt 6.0.0
-    ]
+		// You can also make your code fail to compile if you use deprecated APIs.
+		// In order to do so, uncomment the following line.
+		// You can also select to disable deprecated APIs only up to a certain version of Qt.
+		//"QT_DISABLE_DEPRECATED_BEFORE=0x060000" // disables all the APIs deprecated before Qt 6.0.0
+	]
 
-    files: [
-        "main.cpp",
-        "myapp.cpp",
-        "myapp.h",
-        "qml.qrc",
-    ]
+	files: [
+		"main.cpp",
+		"myapp.cpp",
+		"myapp.h",
+		"qml.qrc",
+	]
 
-    Group {     // Properties for the produced executable
-        fileTagsFilter: "application"
-        qbs.install: true
-        qbs.installDir: "/bin"
-    }
+	Group {     // Properties for the produced executable
+		fileTagsFilter: "application"
+		qbs.install: true
+		qbs.installDir: "/bin"
+	}
 }
