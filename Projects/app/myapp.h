@@ -13,6 +13,7 @@ signals:
 
 public slots:
   QString applicationDirPath() const;
+  QString urlToNativeFilePath(const QString &filePath);
 };
 
 #endif // MYAPP_H
