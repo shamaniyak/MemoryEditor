@@ -216,6 +216,7 @@ QString MemoryWrapper::getFilePath() const
 void MemoryWrapper::setFilePath(const QString &file_path)
 {
   mem_->setFilePath(file_path);
+  emit filePathChanged(file_path);
 }
 
 QVariant MemoryWrapper::getVal(const QString &path)
