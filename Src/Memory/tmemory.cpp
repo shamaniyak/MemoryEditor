@@ -212,9 +212,12 @@ QString TMemory::getFilePath() const
 
 void TMemory::setFilePath(const QString &path)
 {
+  if(file_path_ == path)
+    return;
   file_path_ = path;
   if(backup_)
     backup_->init();
+  setChanged(true);
 }
 
 QStringList &TMemory::words()
