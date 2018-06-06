@@ -11,8 +11,11 @@ Item {
 		id: actionNew
 		text: qsTr("New")
 		onTriggered: {
-			memModel.filePath = ""
-			memModel.clear()
+			if(memModel.changed())
+				messageDialog.open()
+			else {
+				createNew()
+			}
 		}
 	}
 
@@ -39,8 +42,7 @@ Item {
 		id: actionSaveAs
 		text: qsTr("Save As")
 		onTriggered: {
-			fileDialog
-			memModel.save()
+			fileSaveDialog.open()
 		}
 	}
 
@@ -73,12 +75,48 @@ Item {
 		selectExisting: false
 		title: "Please enter a file"
 		folder: app.applicationDirPath()
+		signal saved()
 		onAccepted: {
-			console.log("You chose: " + fileDialog.fileUrl)
-			memModel.open(fileDialog.fileUrl)
+			//console.log("You chose: " + fileSaveDialog.fileUrl)
+			var filePath = app.urlToNativeFilePath(fileSaveDialog.fileUrl)
+			console.log("You chose: " + filePath)
+			memModel.filePath = filePath
+			memModel.save()
+			saved()
 		}
 		onRejected: {
 			console.log("Canceled")
+			saved()
 		}
+	}
+
+	// Диалог сохранения
+	MessageDialog {
+		id: messageDialog
+		text: "The memory has been modified."
+		informativeText: "Do you want to save your changes?"
+		standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
+		onAccepted: {
+			if(memModel.filePath === "") {
+				fileSaveDialog.saved.connect(saved)
+				fileSaveDialog.open()
+			}
+			else
+				if(memModel.save())
+					console.log("Memory saved.")
+			createNew()
+		}
+		onDiscard: {
+			createNew()
+		}
+
+		function saved() {
+			createNew()
+		}
+	}
+
+	function createNew() {
+		memModel.filePath = ""
+		memModel.clear()
 	}
 }
