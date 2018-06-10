@@ -4,28 +4,40 @@ import QtQuick.Dialogs 1.2
 import MemoryManager 1.0
 
 Item {
-	property var memModel
-	property var mainWindow
+    id: root
+    property var memModel
 	// actionNew
 	property Action actionNew: Action {
 		id: actionNew
 		text: qsTr("New")
 		onTriggered: {
-			if(memModel.changed())
-				messageDialog.open()
+            if(memModel.changed()) {
+                messageDialog.command = createNew
+                messageDialog.open()
+            }
 			else {
 				createNew()
 			}
-		}
+        }
 	}
 
 	// actionOpen
 	property Action actionOpen: Action {
 		id: actionOpen
 		text: qsTr("Open")
-		onTriggered: {
-			fileDialog.open()
-		}
+        onTriggered: {
+            if(memModel.changed()) {
+                messageDialog.command = showOpenDialog
+                messageDialog.open()
+            }
+            else {
+                showOpenDialog()
+            }
+        }
+
+        function showOpenDialog() {
+            fileDialog.open()
+        }
 	}
 
 	// actionSave
@@ -33,8 +45,12 @@ Item {
 		id: actionSave
 		text: qsTr("Save")
 		onTriggered: {
-			memModel.save()
-		}
+            if(memModel.filePath === "") {
+                fileSaveDialog.open()
+            }
+            else
+                memModel.save()
+        }
 	}
 
 	// actionSaveAs
@@ -51,72 +67,61 @@ Item {
 		id: actionQuit
 		text: qsTr("Quit")
 		onTriggered: {
-			mainWindow.close()
+            if(memModel.changed()) {
+                messageDialog.command = quitCommand
+                messageDialog.open()
+            }
+            else
+                quitCommand()
 		}
+
+        function quitCommand() {
+            Qt.quit()
+        }
 	}
 
-	FileDialog {
-		id: fileDialog
-		title: "Please choose a file"
-		folder: app.applicationDirPath()
-		onAccepted: {
-			//console.log("You chose: " + fileDialog.fileUrls)
-			var filePath = app.urlToNativeFilePath(fileDialog.fileUrl)
-			console.log("You chose: " + filePath)
-			memModel.open(filePath)
-		}
-		onRejected: {
-			console.log("Canceled")
-		}
+    OpenMemoryDialog {
+        id: fileDialog
+        memModel: root.memModel
 	}
 
-	FileDialog {
-		id: fileSaveDialog
-		selectExisting: false
-		title: "Please enter a file"
-		folder: app.applicationDirPath()
-		signal saved()
-		onAccepted: {
-			//console.log("You chose: " + fileSaveDialog.fileUrl)
-			var filePath = app.urlToNativeFilePath(fileSaveDialog.fileUrl)
-			console.log("You chose: " + filePath)
-			memModel.filePath = filePath
-			memModel.save()
-			saved()
-		}
-		onRejected: {
-			console.log("Canceled")
-			saved()
-		}
+    SaveMemoryDialog {
+        id: fileSaveDialog
+        memModel: root.memModel
 	}
 
-	// Диалог сохранения
-	MessageDialog {
-		id: messageDialog
-		text: "The memory has been modified."
-		informativeText: "Do you want to save your changes?"
-		standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
+    // Диалог запроса на сохранение
+    SaveMemoryMessageDialog {
+        id: messageDialog
+
 		onAccepted: {
-			if(memModel.filePath === "") {
-				fileSaveDialog.saved.connect(saved)
-				fileSaveDialog.open()
-			}
-			else
-				if(memModel.save())
-					console.log("Memory saved.")
-			createNew()
+            doSave()
 		}
 		onDiscard: {
-			createNew()
-		}
+            doCommand()
+        }
+
+        function doSave() {
+            if(memModel.filePath === "") {
+                fileSaveDialog.saved.connect(saved)
+                fileSaveDialog.open()
+            }
+            else {
+                if(memModel.save()) {
+                    console.log("Memory saved.", memModel.filePath)
+                    doCommand()
+                }
+            }
+        }
 
 		function saved() {
-			createNew()
-		}
+            fileSaveDialog.saved.disconnect(saved)
+            doCommand()
+        }
 	}
 
 	function createNew() {
 		memModel.filePath = ""
 		memModel.clear()
-	}
+    }
 }

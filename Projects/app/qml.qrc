@@ -8,5 +8,8 @@
         <file>MainMenu.qml</file>
         <file>MemoryElementEditor.qml</file>
         <file>FileActions.qml</file>
+        <file>OpenMemoryDialog.qml</file>
+        <file>SaveMemoryDialog.qml</file>
+        <file>SaveMemoryMessageDialog.qml</file>
     </qresource>
 </RCC>

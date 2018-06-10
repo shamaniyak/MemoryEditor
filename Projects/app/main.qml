@@ -18,8 +18,7 @@ ApplicationWindow {
 
 	FileActions {
 		id: fileActions
-		memModel: memModel
-		mainWindow: mainWindow
+        memModel: memModel
 	}
 
 	// Модель
@@ -31,34 +30,16 @@ ApplicationWindow {
 	MemoryEditor {
 		id: editor
 		memModel: memModel
-	}
-
-	// Диалог сохранения
-	MessageDialog {
-		id: messageDialog
-		text: "The memory has been modified."
-		informativeText: "Do you want to save your changes?"
-		standardButtons: MessageDialog.Save | MessageDialog.Discard | MessageDialog.Cancel
-		onAccepted: {
-			if(memModel.save())
-				console.log("Memory saved.")
-			Qt.quit()
-		}
-		onDiscard: {
-			Qt.quit()
-		}
-	}
+    }
 
 	Component.onCompleted: {
 		//console.log()
 		appDirPath = app.applicationDirPath()
-		memModel.open(appDirPath + "/memory.moi")
+        //memModel.open(appDirPath + "/memory.moi")
 	}
 
 	onClosing: {
-		if(memModel.changed()) {
-			close.accepted = false
-			messageDialog.open()
-		}
+        close.accepted = false
+        fileActions.actionQuit.trigger(mainWindow)
 	}
 }
