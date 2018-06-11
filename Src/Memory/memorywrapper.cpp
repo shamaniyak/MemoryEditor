@@ -411,6 +411,8 @@ bool MemoryWrapper::move(const MEWrapper &me, const MEWrapper &parent, int pos)
 //      return false;
     int row = me.getIndex();
     int destRow = pos > row ? pos + 1: pos;
+    if(row==destRow)
+      return false;
     beginMoveRows(source, row, row, source, destRow);
 
     bool ok = me.getMe()->move_to(parent.getMe(), pos);
