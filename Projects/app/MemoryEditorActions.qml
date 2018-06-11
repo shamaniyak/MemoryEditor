@@ -4,8 +4,7 @@ import QtQuick.Controls 2.3
 Item {
     property var memModel
     property var treeView
-
-
+    property var memEditor
 
     // addAction
     property Action addAction: Action {
@@ -13,7 +12,8 @@ Item {
         text: qsTr("&Add")
         onTriggered: {
             var me = memModel.getMeByIndex(treeView.currentIndex)
-            memModel.add(me, "new")
+            memEditor.add(me, "new", true);
+            //memModel.add(me, "new")
         }
     }
     // removeAction
@@ -22,7 +22,8 @@ Item {
         text: qsTr("&Del")
         onTriggered: {
             var me = memModel.getMeByIndex(treeView.currentIndex)
-            memModel.deleteMe(me)
+            memEditor.deleteMe(me)
+            //memModel.deleteMe(me)
         }
     }
     // clearAction
@@ -30,7 +31,26 @@ Item {
         id: clearAction
         text: qsTr("&Clear")
         onTriggered: {
-            memModel.clear()
+            //var me = memModel.getMeByIndex(treeView.currentIndex)
+            memEditor.clear()
+        }
+    }
+    // undoAction
+    property Action undoAction: Action {
+        id: undoAction
+        text: qsTr("&Undo")
+        enabled: memEditor.canUndo
+        onTriggered: {
+            memEditor.undo()
+        }
+    }
+    // redoAction
+    property Action redoAction: Action {
+        id: redoAction
+        text: qsTr("&Redo")
+        enabled: memEditor.canRedo
+        onTriggered: {
+            memEditor.redo()
         }
     }
 }

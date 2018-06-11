@@ -205,17 +205,20 @@ private:
 MemoryEditor::MemoryEditor(QObject *parent) : QObject(parent)
 {
   stack_ = new QUndoStack(this);
+  connect(stack_, &QUndoStack::canRedoChanged, this, &MemoryEditor::canRedoChanged);
+  connect(stack_, &QUndoStack::canUndoChanged, this, &MemoryEditor::canUndoChanged);
 }
 
-void MemoryEditor::add(MEWrapper &parent, const QString &name, bool checkExist)
+void MemoryEditor::add(const MEWrapper &parent, const QString &name, bool checkExist)
 {
   if(!mem_)
     return;
-  if(!parent)
-    parent = mem_->getME();
-  if(parent)
+  auto p = parent;
+  if(!p)
+    p = mem_->getME();
+  if(p)
   {
-    AddCommand *cmd = new AddCommand(mem_, parent, name, checkExist);
+    AddCommand *cmd = new AddCommand(mem_, p, name, checkExist);
     stack_->push(cmd);
   }
 }
@@ -244,7 +247,7 @@ void MemoryEditor::del(const QString &path)
   deleteMe(me);
 }
 
-void MemoryEditor::deleteMe(MEWrapper &me)
+void MemoryEditor::deleteMe(MEWrapper me)
 {
   if(mem_ && me)
   {
@@ -297,6 +300,37 @@ void MemoryEditor::move(MEWrapper &me, MEWrapper &parent, int pos)
     auto cmd = new MoveCommand(mem_, me, pos);
     stack_->push(cmd);
   }
+}
+
+void MemoryEditor::undo()
+{
+  if(canUndo())
+    stack_->undo();
+}
+
+void MemoryEditor::redo()
+{
+  if(canRedo())
+    stack_->redo();
+}
+
+bool MemoryEditor::canUndo()
+{
+  if(stack_)
+    return stack_->canUndo();
+  return false;
+}
+
+bool MemoryEditor::canRedo()
+{
+  if(stack_)
+    return stack_->canRedo();
+  return false;
+}
+
+QObject *MemoryEditor::getStack() const
+{
+  return stack_;
 }
 
 MemoryWrapper *MemoryEditor::getMem() const

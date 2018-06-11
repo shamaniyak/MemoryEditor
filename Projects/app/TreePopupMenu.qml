@@ -23,5 +23,13 @@ Menu {
         action: actions.clearAction
         implicitHeight: 25
     }
+    MenuItem {
+        action: actions.undoAction
+        implicitHeight: 25
+    }
+    MenuItem {
+        action: actions.redoAction
+        implicitHeight: 25
+    }
 }
 

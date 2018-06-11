@@ -48,8 +48,8 @@ struct ChangeEvent
 {
 private:
   Q_GADGET
-  Q_PROPERTY(int row MEMBER row)
   Q_PROPERTY(int type READ getType)
+  Q_PROPERTY(int row MEMBER row)
   Q_PROPERTY(QString path MEMBER path)
 public:
   EMemoryChange type = mcNone;
@@ -62,6 +62,8 @@ public:
   QString prevName;
   QVariant prevVal;
   QString path;
+
+  Q_ENUM(EMemoryChange)
 
   int getType() {return type;}
 };

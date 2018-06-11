@@ -24,10 +24,13 @@ ApplicationWindow {
 	// Модель
 	MemoryModel {
 		id: memModel
-	}
+        onChange: {
+            console.log(ev)
+        }
+    }
 
-	// Редактор
-	MemoryEditor {
+    // Диалог Редактора памяти
+    MemoryEditorDialog {
 		id: editor
 		memModel: memModel
     }

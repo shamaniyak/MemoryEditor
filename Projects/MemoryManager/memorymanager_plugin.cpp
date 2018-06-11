@@ -2,6 +2,7 @@
 #include "memorymanager.h"
 #include "Memory/memorywrapper.h"
 #include "Memory/qmemorymodel.h"
+#include "Memory/memoryeditor.h"
 
 #include <qqml.h>
 
@@ -13,5 +14,7 @@ void MemoryManagerPlugin::registerTypes(const char *uri)
 
     qRegisterMetaType<MEWrapper>("MEWrapper");
     qmlRegisterUncreatableType<MEWrapper>(uri, 1, 0, "MEWrapper", "Can't create MEWrapper.");
+
+    qmlRegisterType<MemoryEditor>(uri, 1, 0, "MemoryEditor");
 }
 

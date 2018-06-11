@@ -1,11 +1,25 @@
 ﻿import QtQuick 2.10
 import QtQuick.Layouts 1.3
+import MemoryManager 1.0
 
 Item {
 	id: editor
 	anchors.fill: parent
 	property var memModel
-	readonly property var actions: meActions
+    //readonly property var actions: meActions
+
+    // Редактор для памяти (набор команд)
+    MemoryEditor {
+        id: memEditor
+        mem: memModel
+    }
+
+    property MemoryEditorActions actions: MemoryEditorActions {
+        id: meActions
+        memModel: editor.memModel
+        treeView: treeView
+        memEditor: memEditor
+    }
 
 	GridLayout {
 		anchors.fill: parent
@@ -19,11 +33,7 @@ Item {
 			// Контекстное меню для дерева
 			treeMenu: TreePopupMenu {
 				id: treeMenu
-				actions: MemoryEditorActions {
-					id: meActions
-					memModel: editor.memModel
-					treeView: treeView
-				}
+                actions: editor.actions
 			}
 
 			onNameChanged: {
