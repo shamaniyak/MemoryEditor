@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <memory>
 
 namespace Memory
 {
@@ -87,7 +88,7 @@ protected:
   void deleteMe(MEWrapper &me);
 
 private:
-  Memory::TME *me_ = 0;
+  std::shared_ptr<Memory::TME> me_ = 0;
   MemoryWrapper *mem_ = 0;
 
   friend class MemoryWrapper;

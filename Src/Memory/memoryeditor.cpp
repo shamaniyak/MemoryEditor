@@ -39,24 +39,40 @@ class AddCommand : public BaseCommand
 public:
   AddCommand(MemoryWrapper *m, MEWrapper &parent, const QString &name, bool checkExist) :
     BaseCommand(m, "Add"),
-    parent_(parent), name_(name), checkExist_(checkExist) {   }
+    parent_(parent), name_(name), checkExist_(checkExist)
+  {
+    path_ = parent.getPath();
+    parentIndex_ = parent.getIndex();
+  }
 
   virtual void undo() override
   {
-    m_->deleteMe(newMe_);
+    parent_ = getParent();
+    parent_.delByI(newIndex_);
   }
   virtual void redo() override
   {
+    parent_ = getParent();
     newMe_ = m_->add(parent_, name_, checkExist_);
+    newIndex_ = newMe_.getIndex();
   }
 
   MEWrapper newMe() const { return newMe_; }
 
 private:
+  MEWrapper getParent() {
+    parent_ = m_->get(path_);
+    if(parent_ && parent_.parent())
+      parent_ = parent_.parent().getByI(parentIndex_);
+    return parent_;
+  }
   MEWrapper parent_;
+  QString path_;
+  int parentIndex_;
   QString name_;
   bool checkExist_ = true;
   MEWrapper newMe_;
+  int newIndex_;
 };
 
 class AddFromCommand : public BaseCommand
@@ -91,15 +107,17 @@ public:
   DelCommand(MemoryWrapper *m, MEWrapper &me) : BaseCommand(m, "Del"),
     me_(me), parent_(me.parent()), name_(me.name()), index_(me.getIndex())
   {
+    path_ = parent_.getPath();
     buf_.setMem(m->mem_.get());
     buf_.addFrom(me_.getMe(), true);
   }
 
   virtual void undo() override
   {
+    parent_ = m_->get(path_);
     me_ = m_->add(parent_, name_, false);
     m_->move(me_, parent_, index_);
-    m_->addFrom(me_, MEWrapper(&buf_), true);
+    m_->addFrom(me_, MEWrapper(&buf_, m_), true);
   }
   virtual void redo() override
   {
@@ -109,6 +127,7 @@ public:
 private:
   MEWrapper me_;
   MEWrapper parent_;
+  QString path_;
   QString name_;
   int index_;
   Memory::TopME buf_;

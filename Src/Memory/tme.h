@@ -40,6 +40,8 @@ public:
 
   typedef QMap<int,TME*> elements_map;
   typedef std::vector<TME*> elements_vec;
+  typedef std::shared_ptr<TME> shared_me;
+  typedef std::vector<shared_me> vec_shared_me;
 
   struct Elements
   {
@@ -102,6 +104,8 @@ public:
   TMemory *mem() const;
 
   TMEData data() const;
+
+  static int size();
 
 protected:
   void remove(const TME *me);

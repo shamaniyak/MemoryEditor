@@ -20,12 +20,14 @@
 #include "tmemory.h"
 #include "memorymanager.h"
 
+#include <QDebug>
+
 //  MemoryWrapper
 
 MemoryWrapper::MemoryWrapper(QObject *parent) : QAbstractItemModel(parent),
   mem_(new Memory::TMemory())
 {
-
+  qDebug() << Memory::TME::size();
 }
 
 MemoryWrapper::~MemoryWrapper()
@@ -280,8 +282,8 @@ void MemoryWrapper::setSelected(const MEWrapper &me)
   if(!me)
     return;
 
-  if(mem_->getSelected() != me.me_) {
-    mem_->setSelected(me.me_);
+  if(mem_->getSelected() != me.me_.get()) {
+    mem_->setSelected(me.me_.get());
 
     emit selectedChanged();
     doChange(me, EMemoryChange::mcSelect);

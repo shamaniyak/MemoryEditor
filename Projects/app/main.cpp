@@ -3,6 +3,19 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QDebug>
+#include <memory>
+
+void test() {
+  std::weak_ptr<int> wp;
+  {
+    std::shared_ptr<int> sp(new int(123));
+    wp = sp;
+  }
+  if(auto sp1 = wp.lock())
+    qDebug() << *sp1.get();
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +25,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     MyApp myApp;
+
+    //test();
 
     qmlRegisterUncreatableType<MyApp>("MyApp", 1, 0, "MyApp", "Can't creat MyApp");
 

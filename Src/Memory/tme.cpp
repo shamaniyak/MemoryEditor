@@ -264,20 +264,28 @@ TMEData TME::data() const
   return data;
 }
 
+int TME::size()
+{
+  int res = 0;//sizeof(id_name_);
+  //res += sizeof(val_);
+  res += sizeof(std::weak_ptr<TME>);
+  //res += sizeof(elements_svec);
+  //res += sizeof(std::shared_ptr<Memory::TME>);
+  return res;
+}
+
 void TME::setParent(TME *parent)
 {
-  if(parent)
-  {
-    if(parent == this->parent_)
-      return;
+  if(parent == this->parent_)
+    return;
 
-    if(parent_)
-       parent_->remove(this);
+  if(parent_)
+     parent_->remove(this);
 
-    parent->childs_.add(this);
+  parent_ = parent;
 
-    parent_ = parent;
-  }
+  if(parent_)
+    parent_->childs_.add(this);
 }
 
 TME::Elements::Elements()
@@ -334,7 +342,7 @@ bool TME::Elements::remove(const TME *me)
   auto it = std::find(items_.begin(), items_.end(), me);
   if(it != items_.end())
   {
-    delete me;
+    //delete me;
     items_.erase(it);
     return true;
   }
