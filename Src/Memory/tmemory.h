@@ -103,8 +103,8 @@ public:
 
   // Добавить элемент памяти.
   // Если успешно, то указатель
-  TME* add(TME *parent=nullptr, const QString &name="");
-  bool addFrom(TME *parent, TME *mefrom, bool recurs);
+  TME::shared_me add(TME::shared_me parent=nullptr, const QString &name="");
+  bool addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs);
   // Удалить элемент памяти
   bool del(const QString &path);
   //
@@ -114,7 +114,7 @@ public:
   //
   TME::shared_me getSubelement(TME::shared_me mep, const QString &name);
   //
-  QString getElementPath(TME *getTopME) const;
+  QString getElementPath(TME::shared_me getTopME) const;
   // получить слово по индексу
   QString getWord(int idx) const;
   // Возвращает индекс слова в списке, если оно есть. Иначе индекс нового добавленного.
@@ -128,7 +128,7 @@ public:
 
   bool saveTo(const QString &fileName);
 
-  TME* operator[](const QString &path);
+  TME::shared_me operator[](const QString &path);
 
   bool undo();
   bool redo();
@@ -144,13 +144,13 @@ protected:
 
   void CreateTopME();
 
-  TME* add(const QString &path);
+  TME::shared_me add(const QString &path);
 
   bool loadMemory();
 
   void saveBackup();
 
-  bool addFromRecurse(TME *parent, TME *mefrom);
+  bool addFromRecurse(TME::shared_me parent, TME::shared_me mefrom);
 
   void createBackup();
 

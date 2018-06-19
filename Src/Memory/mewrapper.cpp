@@ -30,7 +30,7 @@ MEWrapper::MEWrapper(MemoryWrapper *mem)
   setMem(mem);
 }
 
-MEWrapper::MEWrapper(Memory::TME *me, MemoryWrapper *mem) :
+MEWrapper::MEWrapper(Memory::TME::shared_me me, MemoryWrapper *mem) :
   me_(me)
 {
   setMem(mem);

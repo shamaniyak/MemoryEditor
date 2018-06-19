@@ -43,7 +43,7 @@ class MEWrapper
 public:
   MEWrapper();
   MEWrapper(MemoryWrapper *mem);
-  MEWrapper(Memory::TME *me, MemoryWrapper *mem = 0);
+  MEWrapper(Memory::TME::shared_me me, MemoryWrapper *mem = 0);
   MEWrapper(const MEWrapper &src);
   ~MEWrapper();
 

@@ -282,8 +282,8 @@ void MemoryWrapper::setSelected(const MEWrapper &me)
   if(!me)
     return;
 
-  if(mem_->getSelected() != me.me_.get()) {
-    mem_->setSelected(me.me_.get());
+  if(mem_->getSelected() != me.me_) {
+    mem_->setSelected(me.me_);
 
     emit selectedChanged();
     doChange(me, EMemoryChange::mcSelect);
@@ -303,7 +303,7 @@ QModelIndex MemoryWrapper::getIndexByMe(const MEWrapper &me)
   if(me == getME())
     return QModelIndex();
 
-  return createIndex(me.getIndex(), 0, me.getMe());
+  return createIndex(me.getIndex(), 0, me.getMe().get());
 }
 
 MEWrapper MemoryWrapper::getMeByIndex(const QModelIndex &index) const
@@ -388,13 +388,13 @@ void MemoryWrapper::clearR(Memory::TME::shared_me me)
   DeleteMEW(me);
 }
 
-void MemoryWrapper::clearME1(Memory::TME *me)
+void MemoryWrapper::clearME1(Memory::TME::shared_me me)
 {
   auto childs = me->getElements();
   int cnt = childs.count();
   for(int i = 0; i <cnt; ++i)
   {
-    clearR(childs.get(i).get());
+    clearR(childs.get(i));
   }
   me->clear();
 }
@@ -501,19 +501,19 @@ MEWrapper MemoryWrapper::CreateMEW(Memory::TME::shared_me me)
   if(!me)
     return resMe;
 
-  if(!map_mew_.contains(me))
-    map_mew_[me] = MEWrapper(me, this);
+  if(!map_mew_.contains(me.get()))
+    map_mew_[me.get()] = MEWrapper(me, this);
 
-  return map_mew_[me];
+  return map_mew_[me.get()];
 }
 
-void MemoryWrapper::DeleteMEW(Memory::TME *me)
+void MemoryWrapper::DeleteMEW(Memory::TME::shared_me me)
 {
   if(!me)
     return;
 
-  if(map_mew_.contains(me))
+  if(map_mew_.contains(me.get()))
   {
-    map_mew_.remove(me);
+    map_mew_.remove(me.get());
   }
 }

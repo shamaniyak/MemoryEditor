@@ -20,6 +20,7 @@
 
 QMemoryModel::QMemoryModel(QObject *parent) : MemoryWrapper(parent)
 {
+    headers = {tr("Name"), tr("Value"), tr("Path"), tr("Type")};
 }
 
 QMemoryModel::~QMemoryModel()
@@ -318,21 +319,21 @@ bool QMemoryModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
   QByteArray encodedData = data->data("application/vnd.text.list");
   QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
-  while (!stream.atEnd())
-  {
-    Memory::TME me(getME().getMe());
-    me.load(stream);
+//  while (!stream.atEnd())
+//  {
+//    Memory::TME me(getME().getMe());
+//    me.load(stream);
 
-    auto meParent = getMeByIndex(parent);
-    if(!meParent)
-      meParent = getME();
-    auto me1 = add(meParent, me.name());
-    if(me1) {
-      me1.setVal(me.val());
-      move(me1, meParent, beginRow);
-      addFrom(me1, MEWrapper(&me), true);
-    }
-  }
+//    auto meParent = getMeByIndex(parent);
+//    if(!meParent)
+//      meParent = getME();
+//    auto me1 = add(meParent, me.name());
+//    if(me1) {
+//      me1.setVal(me.val());
+//      move(me1, meParent, beginRow);
+//      addFrom(me1, MEWrapper(&me), true);
+//    }
+//  }
 
   //  QStringList newItems;
 //  int rows = 0;

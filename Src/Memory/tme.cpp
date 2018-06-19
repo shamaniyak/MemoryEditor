@@ -116,6 +116,11 @@ TME::shared_me TME::Add(const QString &name)
   return me;
 }
 
+void TME::Add(const TME::shared_me &me)
+{
+    childs_.add(me);
+}
+
 bool TME::addFrom(shared_me mefrom, bool recurs, bool checkExist)
 {
   bool res = false;
@@ -306,7 +311,7 @@ TME::shared_me TME::Elements::add(int id, shared_me parent)
   //this->items_.insert(me->id_name(), me);
 }
 
-void TME::Elements::add(shared_me me)
+void TME::Elements::add(const shared_me &me)
 {
   items_.push_back(me);
 }

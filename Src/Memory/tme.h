@@ -48,7 +48,7 @@ public:
   {
     Elements();
     shared_me add(int id, shared_me parent);
-    void add(shared_me me);
+    void add(const shared_me &me);
     int count() const;
     shared_me get(int i) const;
     shared_me get_by_id_name(int id) const;
@@ -84,6 +84,7 @@ public:
   QString getPath() const;
 
   shared_me Add(const QString &name);
+  void Add(const shared_me &me);
   bool addFrom(shared_me mefrom, bool recurs, bool checkExist = false);
   shared_me Get(const QString &name);
   bool Del(const QString &name);
@@ -125,6 +126,8 @@ private:
 class TopME : public TME
 {
 public:
+    typedef std::shared_ptr<TopME> shared_top_me;
+
   TopME() {}
   TopME(TMemory * mem) : mem_(mem)
   {

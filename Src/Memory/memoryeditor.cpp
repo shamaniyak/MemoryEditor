@@ -108,8 +108,8 @@ public:
     me_(me), parent_(me.parent()), name_(me.name()), index_(me.getIndex())
   {
     path_ = parent_.getPath();
-    buf_.setMem(m->mem_.get());
-    buf_.addFrom(me_.getMe(), true);
+    buf_->setMem(m->mem_.get());
+    buf_->addFrom(me_.getMe(), true);
   }
 
   virtual void undo() override
@@ -130,7 +130,7 @@ private:
   QString path_;
   QString name_;
   int index_;
-  Memory::TopME buf_;
+  Memory::TopME::shared_top_me buf_;
 };
 
 class EditNameCommand : public BaseCommand

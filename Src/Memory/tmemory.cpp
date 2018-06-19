@@ -147,7 +147,7 @@ TMemory::~TMemory()
   if(getChanged() && autosave_)
     save();
   setSelected(nullptr);
-  delete (TopME*)top_me_;
+  //delete (TopME*)top_me_;
 }
 
 void TMemory::init()
@@ -157,7 +157,7 @@ void TMemory::init()
 
 void TMemory::CreateTopME()
 {
-  top_me_ = new TopME(this);
+  top_me_.reset(new TopME(this));
   setSelected(top_me_);
 }
 
@@ -235,7 +235,7 @@ void TMemory::setAutosave(bool val)
   autosave_ = val;
 }
 
-TME *TMemory::add(const QString &path)
+TME::shared_me TMemory::add(const QString &path)
 {
   TME *me = nullptr;
 
@@ -253,12 +253,12 @@ TME *TMemory::add(const QString &path)
 //    map_me_.insert(path, add(parent, name));
 //  }
 
-  return me;
+  return {};
 }
 
-TME *TMemory::add(TME *parent, const QString &name)
+TME::shared_me TMemory::add(TME::shared_me parent, const QString &name)
 {
-  TME *me = nullptr;
+  TME::shared_me me;
 
   if(!parent)
     parent = getTopME();
@@ -280,7 +280,7 @@ TME *TMemory::add(TME *parent, const QString &name)
   return me;
 }
 
-bool TMemory::addFromRecurse(TME *parent, TME *mefrom)
+bool TMemory::addFromRecurse(TME::shared_me parent, TME::shared_me mefrom)
 {
   if(!parent || !mefrom)
     return false;
@@ -300,7 +300,7 @@ bool TMemory::addFromRecurse(TME *parent, TME *mefrom)
   return true;
 }
 
-bool TMemory::addFrom(TME *parent, TME *mefrom, bool recurs)
+bool TMemory::addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs)
 {
   bool res = false;
   if(!mefrom)
@@ -382,7 +382,7 @@ TME::shared_me TMemory::getSubelement(TME::shared_me mep, const QString &name)
   return mep->Get(name);
 }
 
-QString TMemory::getElementPath(TME *me) const
+QString TMemory::getElementPath(TME::shared_me me) const
 {
   if(!me)
     return "";
@@ -508,7 +508,7 @@ bool TMemory::saveTo(const QString &fileName)
   return save();
 }
 
-TME *TMemory::operator[](const QString &path)
+TME::shared_me TMemory::operator[](const QString &path)
 {
   return get(path);
 }
@@ -564,7 +564,7 @@ bool TMemory::loadMemory()
   getTopME()->load(in);
 
   // установить текущий
-  TME *me = getTopME();
+  auto me = getTopME();
   if(ver >0)
   {
     QString path;
