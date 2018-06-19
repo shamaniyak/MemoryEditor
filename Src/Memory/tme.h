@@ -41,30 +41,31 @@ public:
   typedef QMap<int,TME*> elements_map;
   typedef std::vector<TME*> elements_vec;
   typedef std::shared_ptr<TME> shared_me;
+  typedef std::weak_ptr<TME> weak_me;
   typedef std::vector<shared_me> vec_shared_me;
 
   struct Elements
   {
     Elements();
-    TME * add(int id, TME *parent);
-    void add(TME *me);
+    shared_me add(int id, shared_me parent);
+    void add(shared_me me);
     int count() const;
-    TME *get(int i) const;
-    TME *get_by_id_name(int id) const;
-    bool remove(const TME *me);
+    shared_me get(int i) const;
+    shared_me get_by_id_name(int id) const;
+    bool remove(const shared_me me);
     void clear();
-    int get_index(const TME *me) const;
+    int get_index(const shared_me me) const;
     bool move(int from, int to);
 
-    void load(QDataStream &ds, TME *parent);
+    void load(QDataStream &ds, shared_me parent);
     void save(QDataStream &ds) const;
 
   private:
-    elements_vec items_;
+    vec_shared_me items_;
   };
 
   TME();
-  TME(TME *parent, int id_name=-1, QVariant val=0);
+  TME(shared_me parent, int id_name=-1, QVariant val=0);
   TME(const TME &me);
   ~TME();
 
@@ -77,16 +78,16 @@ public:
   void setVal(const TMEValue &val);
   void setVal(const QVariant &val);
 
-  TME *parent() const;
-  void setParent(TME *parent);
+  shared_me parent() const;
+  void setParent(shared_me parent);
 
   QString getPath() const;
 
-  TME *Add(const QString &name);
-  bool addFrom(TME *mefrom, bool recurs, bool checkExist = false);
-  TME *Get(const QString &name);
+  shared_me Add(const QString &name);
+  bool addFrom(shared_me mefrom, bool recurs, bool checkExist = false);
+  shared_me Get(const QString &name);
   bool Del(const QString &name);
-  bool Del(TME *me);
+  bool Del(shared_me me);
 
   void clear();
 
@@ -113,7 +114,7 @@ protected:
 private:
   int id_name_ = -1;// Любой айди или айди имени в общем массиве слов
   TMEValue val_;
-  TME *parent_ = nullptr;
+  weak_me parent_;// = nullptr;
   Elements childs_;
 };
 

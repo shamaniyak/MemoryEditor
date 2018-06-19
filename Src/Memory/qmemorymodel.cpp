@@ -48,7 +48,7 @@ QModelIndex QMemoryModel::index(int row, int column, const QModelIndex &parent) 
     me = getMeByIndex(parent);
   }
 
-  return createIndex(row, column, me.getByI(row).getMe());
+  return createIndex(row, column, me.getByI(row).getMe().get());
 }
 
 QModelIndex QMemoryModel::parent(const QModelIndex &child) const
@@ -63,7 +63,7 @@ QModelIndex QMemoryModel::parent(const QModelIndex &child) const
 
   auto parentME = me.parent();
   if (parentME && parentME != getME()) { // parent запрашивается не у корневого элемента
-      return createIndex(parentME.getIndex(), 0, parentME.getMe());
+      return createIndex(parentME.getIndex(), 0, parentME.getMe().get());
   }
   else {
       return QModelIndex();

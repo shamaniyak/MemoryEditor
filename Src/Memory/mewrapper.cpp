@@ -53,9 +53,9 @@ void MEWrapper::clear()
     mem_->clearMe(*this);
 }
 
-Memory::TME *MEWrapper::getMe() const
+Memory::TME::shared_me MEWrapper::getMe() const
 {
-  return me_.get();
+  return me_;
 }
 
 MemoryWrapper *MEWrapper::getMem() const

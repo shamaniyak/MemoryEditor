@@ -85,7 +85,7 @@ public:
   // Корневой элемент
   MEWrapper getME() const;
 
-  MEWrapper CreateMEW(Memory::TME *me);
+  MEWrapper CreateMEW(Memory::TME::shared_me me);
   void DeleteMEW(Memory::TME *me);
 
   void doChange(const ChangeEvent &ev);
@@ -159,11 +159,11 @@ protected:
   void clearDeleted();
   void clearMeWrappers();
 
-  void clearR(Memory::TME *me);
+  void clearR(Memory::TME::shared_me me);
   void clearME1(Memory::TME *me);
 
 private:
-  typedef QMap<Memory::TME*, MEWrapper> t_mapMeWrappers;
+  typedef QMap<Memory::TME::shared_me, MEWrapper> t_mapMeWrappers;
   typedef QMultiMap<QString, MEWrapper*> t_multiMapMeWrappers;
   typedef std::vector<MEWrapper*> t_vecMeWrappers;
 

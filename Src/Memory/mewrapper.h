@@ -23,10 +23,12 @@
 #include <QVariant>
 #include <memory>
 
-namespace Memory
-{
-  class TME;
-}
+#include "tme.h"
+
+//namespace Memory
+//{
+//  class TME;
+//}
 
 class MemoryWrapper;
 
@@ -47,7 +49,7 @@ public:
 
   void clear();
 
-  Memory::TME *getMe() const;
+  Memory::TME::shared_me getMe() const;
 
   MemoryWrapper *getMem() const;
 

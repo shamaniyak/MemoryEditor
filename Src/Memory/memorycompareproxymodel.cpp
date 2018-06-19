@@ -81,7 +81,7 @@ QModelIndex MemoryCompareProxyModel::mapFromSource(const QModelIndex &sourceInde
     return QModelIndex();
   auto me = getMeByIndex(sourceIndex);
   //auto meP = me.parent();
-  return createIndex(sourceIndex.row(), sourceIndex.column(), me.getMe());
+  return createIndex(sourceIndex.row(), sourceIndex.column(), me.getMe().get());
 }
 
 QModelIndex MemoryCompareProxyModel::index(int row, int column, const QModelIndex &parent) const

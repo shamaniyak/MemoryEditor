@@ -50,18 +50,18 @@ public:
 
   void clear() override;
 
-  TME* getTopME();
+  TME::shared_me getTopME();
 
-  TME *getSelected() const;
-  void setSelected(TME *getSelected);
+  TME::shared_me getSelected() const;
+  void setSelected(TME::shared_me getSelected);
 
   bool getChanged() const;
   void setChanged(bool getChanged);
 
-  TME * createNew(TME *parent=nullptr, int count = 1);
+  TME::shared_me createNew(TME::shared_me parent=nullptr, int count = 1);
 
 protected:
-  TME *top_me_ = nullptr;
+  TME::shared_me top_me_ = nullptr;
 
   //  TAbstractMemory(const TAbstractMemory& src);
 //  TAbstractMemory& operator=(const TAbstractMemory& src);
@@ -71,7 +71,7 @@ protected:
   void unlock(TME *me);
 
 private:
-  TME *selected_ = nullptr;
+  TME::weak_me selected_;// = nullptr;
   bool changed_ = false;
   QMutex mtx_;
   ElementsManager em_;
@@ -110,9 +110,9 @@ public:
   //
   bool edit(TME *me, const QString &new_name, QVariant new_val);
   //
-  TME* get(const QString &path);
+  TME::shared_me get(const QString &path);
   //
-  TME* getSubelement(TME *mep, const QString &name);
+  TME::shared_me getSubelement(TME::shared_me mep, const QString &name);
   //
   QString getElementPath(TME *getTopME) const;
   // получить слово по индексу

@@ -25,12 +25,12 @@ namespace Memory
 {
 
 TME::TME():
-  id_name_(-1), parent_(nullptr)
+  id_name_(-1)//, parent_(nullptr)
 {
 
 }
 
-TME::TME(TME *parent, int id_name, QVariant val):
+TME::TME(shared_me parent, int id_name, QVariant val):
   id_name_(id_name), val_(val), parent_(parent)
 {
   //mem_ = static_cast<TMemory*>(mem);
@@ -88,24 +88,24 @@ void TME::setVal(const QVariant &val)
   val_.setVal(val);
 }
 
-TME *TME::parent() const
+TME::shared_me TME::parent() const
 {
-  return parent_;
+  return parent_.lock();
 }
 
 QString TME::getPath() const
 {
   QString res ="";
-  if(parent_ !=nullptr)
-    res = parent_->getPath() + "\\";
+  if(parent_.lock())
+    res = parent_.lock()->getPath() + "\\";
   res += name();
   return res;
 }
 
-TME *TME::Add(const QString &name)
+TME::shared_me TME::Add(const QString &name)
 {
   int idx =-1;
-  TME *me = nullptr;//Get(name);
+  shared_me me;//Get(name);
   TMemory *m = this->mem();
 
   if(m){
@@ -116,7 +116,7 @@ TME *TME::Add(const QString &name)
   return me;
 }
 
-bool TME::addFrom(TME *mefrom, bool recurs, bool checkExist)
+bool TME::addFrom(shared_me mefrom, bool recurs, bool checkExist)
 {
   bool res = false;
   if(!mefrom)
@@ -126,7 +126,7 @@ bool TME::addFrom(TME *mefrom, bool recurs, bool checkExist)
   for(int i =0; i <elements.count(); ++i)
   {
     auto me1 = elements.get(i);
-    TME *me2 = nullptr;
+    shared_me me2 = nullptr;
     if(checkExist)
       me2 = Get(me1->name());
     if(!me2) {
@@ -148,7 +148,7 @@ bool TME::addFrom(TME *mefrom, bool recurs, bool checkExist)
   return res;
 }
 
-TME *TME::Get(const QString &name)
+TME::shared_me TME::Get(const QString &name)
 {
   int idx =-1;
   TMemory *m = this->mem();
@@ -159,7 +159,7 @@ TME *TME::Get(const QString &name)
   if(idx >=0)
     return childs_.get_by_id_name(idx);
 
-  return nullptr;
+  return {nullptr};
 }
 
 bool TME::Del(const QString &name)
@@ -172,7 +172,7 @@ bool TME::Del(const QString &name)
   return false;
 }
 
-bool TME::Del(TME *me)
+bool TME::Del(shared_me me)
 {
   if(me)
   {
@@ -274,18 +274,18 @@ int TME::size()
   return res;
 }
 
-void TME::setParent(TME *parent)
+void TME::setParent(shared_me parent)
 {
-  if(parent == this->parent_)
+  if(parent == parent_.lock())
     return;
 
-  if(parent_)
-     parent_->remove(this);
+//  if(parent_.lock())
+//     parent_.lock()->remove(this);
 
   parent_ = parent;
 
-  if(parent_)
-    parent_->childs_.add(this);
+//  if(parent_.lock())
+//    parent_.lock()->childs_.add(this);
 }
 
 TME::Elements::Elements()
@@ -293,20 +293,20 @@ TME::Elements::Elements()
   //items_.reserve(10000);
 }
 
-TME *TME::Elements::add(int id, TME *parent)
+TME::shared_me TME::Elements::add(int id, shared_me parent)
 {
-  TME *me = nullptr;
+  //TME *me = nullptr;
   //if(id >=0)
   {
-    me = new TME(parent, id);
-    items_.push_back(me);
+    //me = new TME(parent, id);
+    items_.push_back({new TME(parent, id)});
   }
-  return me;
+  return items_.back();
 
   //this->items_.insert(me->id_name(), me);
 }
 
-void TME::Elements::add(TME *me)
+void TME::Elements::add(shared_me me)
 {
   items_.push_back(me);
 }
@@ -316,28 +316,28 @@ int TME::Elements::count() const
   return items_.size();
 }
 
-TME *TME::Elements::get(int i) const
+TME::shared_me TME::Elements::get(int i) const
 {
   if(i <0 || i >=count())
-    return nullptr;
+    return {nullptr};
   return items_[i];
 }
 
-TME *TME::Elements::get_by_id_name(int id) const
+TME::shared_me TME::Elements::get_by_id_name(int id) const
 {
-  TME *me = nullptr;
+  //TME *me = nullptr;
   for(const auto &mei: items_)
   {
     if(mei->id_name_ ==id)
     {
-      me = mei;
-      return me;
+      //me = mei;
+      return mei;
     }
   }
-  return me;
+  return {};
 }
 
-bool TME::Elements::remove(const TME *me)
+bool TME::Elements::remove(const shared_me me)
 {
   auto it = std::find(items_.begin(), items_.end(), me);
   if(it != items_.end())
@@ -351,15 +351,15 @@ bool TME::Elements::remove(const TME *me)
 
 void TME::Elements::clear()
 {
-  int cnt = items_.size();
-  for(int i =0; i <cnt; ++i)
-  {
-    delete items_[i];
-  }
+//  int cnt = items_.size();
+//  for(int i =0; i <cnt; ++i)
+//  {
+//    delete items_[i];
+//  }
   items_.clear();
 }
 
-int TME::Elements::get_index(const TME *me) const
+int TME::Elements::get_index(const shared_me me) const
 {
   //auto it = items_.find(me->id_name());
   auto it = std::find(items_.begin(), items_.end(), me);
@@ -390,7 +390,7 @@ bool TME::Elements::move(int from, int to)
   return false;
 }
 
-void TME::Elements::load(QDataStream &ds, TME *parent)
+void TME::Elements::load(QDataStream &ds, shared_me parent)
 {
   int cnt = 0;
   ds >> cnt;
@@ -407,7 +407,7 @@ void TME::Elements::save(QDataStream &ds) const
  int cnt = count();
  ds << cnt;
 
- for(TME* me: items_)
+ for(auto me: items_)
  {
    me->save(ds);
  }

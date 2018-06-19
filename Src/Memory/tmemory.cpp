@@ -63,11 +63,11 @@ void TAbstractMemory::clear()
 
 
 
-TME *TAbstractMemory::createNew(TME *parent, int count)
+TME::shared_me TAbstractMemory::createNew(TME::shared_me parent, int count)
 {
   if(!parent)
     parent = top_me_;
-  TME *me = nullptr;
+  TME::shared_me me = nullptr;
   for(int i = 0; i < count; ++i)
     me = parent->Add("");
   return me;
@@ -94,7 +94,7 @@ void TAbstractMemory::unlock(TME *me)
   em_.unlock(me);
 }
 
-TME *TAbstractMemory::getTopME()
+TME::shared_me TAbstractMemory::getTopME()
 {
   return top_me_;
 }
@@ -109,12 +109,12 @@ void TAbstractMemory::setChanged(bool changed)
   changed_ = changed;
 }
 
-TME *TAbstractMemory::getSelected() const
+TME::shared_me TAbstractMemory::getSelected() const
 {
-  return selected_;
+  return selected_.lock();
 }
 
-void TAbstractMemory::setSelected(TME *selected)
+void TAbstractMemory::setSelected(TME::shared_me selected)
 {
   selected_ = selected;
 }
@@ -358,17 +358,11 @@ bool TMemory::edit(TME *me, const QString &new_name, QVariant new_val)
   return true;
 }
 
-TME *TMemory::get(const QString &path)
+TME::shared_me TMemory::get(const QString &path)
 {
   if(path.isEmpty())
     return top_me_;
 
-  //path.remove()
-  //for debug
-//  if(path.indexOf("*") > 0)
-//  {
-//    int x =0; ++x;
-//  }
   auto path_ = path.split(QRegExp("[\\\\/]"), QString::SkipEmptyParts);
   auto me = getTopME();
   for(const auto &s: path_)
@@ -378,13 +372,10 @@ TME *TMemory::get(const QString &path)
       return me;
   }
 
-//  if(map_me_.find(path) != map_me_.end())
-//    return map_me_[path];
-
   return me;
 }
 
-TME *TMemory::getSubelement(TME *mep, const QString &name)
+TME::shared_me TMemory::getSubelement(TME::shared_me mep, const QString &name)
 {
   if(!mep)
     mep = getTopME();

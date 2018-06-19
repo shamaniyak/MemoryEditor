@@ -382,7 +382,7 @@ void MemoryWrapper::clearMe(const MEWrapper &me)
   }
 }
 
-void MemoryWrapper::clearR(Memory::TME *me)
+void MemoryWrapper::clearR(Memory::TME::shared_me me)
 {
   clearME1(me);
   DeleteMEW(me);
@@ -394,7 +394,7 @@ void MemoryWrapper::clearME1(Memory::TME *me)
   int cnt = childs.count();
   for(int i = 0; i <cnt; ++i)
   {
-    clearR(childs.get(i));
+    clearR(childs.get(i).get());
   }
   me->clear();
 }
@@ -495,7 +495,7 @@ void MemoryWrapper::clearMeWrappers()
   map_mew_.clear();
 }
 
-MEWrapper MemoryWrapper::CreateMEW(Memory::TME *me)
+MEWrapper MemoryWrapper::CreateMEW(Memory::TME::shared_me me)
 {
   MEWrapper resMe;
   if(!me)
