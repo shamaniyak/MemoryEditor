@@ -60,7 +60,7 @@ MEWrapper MemoryWrapper::add(const MEWrapper &parent, const QString &name, bool 
       int row = tmeP->getElements().count();
       beginInsertRows(parentIndex, row, row);
 
-      me = CreateMEW(tmeP->Add(name));
+      me = CreateMEW(mem_->add(tmeP, name));
 
       endInsertRows();
 

@@ -68,8 +68,9 @@ TME::shared_me TAbstractMemory::createNew(TME::shared_me parent, int count)
   if(!parent)
     parent = top_me_;
   TME::shared_me me = nullptr;
-  for(int i = 0; i < count; ++i)
-    me = parent->Add("");
+  for(int i = 0; i < count; ++i) {
+    me = std::make_shared<TME>(parent);
+  }
   return me;
 }
 
@@ -263,19 +264,8 @@ TME::shared_me TMemory::add(TME::shared_me parent, const QString &name)
   if(!parent)
     parent = getTopME();
 
-  //me = createNew(parent);
-
-//  if(!name.isEmpty())
-//    setName(me, name);
-//  if(me)
-//    me->setName(name);
-
-  //if(parent)
-  {
-    //me = parent->Get(name);
-    //if(!me)
-      me = parent->Add(name);
-  }
+  me = createNew(parent);
+  me->setName(name);
 
   return me;
 }

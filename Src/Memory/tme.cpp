@@ -102,20 +102,6 @@ QString TME::getPath() const
   return res;
 }
 
-TME::shared_me TME::Add(const QString &name)
-{
-  int idx =-1;
-  shared_me me;//Get(name);
-  TMemory *m = this->mem();
-
-  if(m){
-    idx = m->getWordIdx(name);
-  }
-  me = childs_.add(idx, this);
-
-  return me;
-}
-
 void TME::Add(const TME::shared_me &me)
 {
     childs_.add(me);

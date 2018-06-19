@@ -83,7 +83,6 @@ public:
 
   QString getPath() const;
 
-  shared_me Add(const QString &name);
   void Add(const shared_me &me);
   bool addFrom(shared_me mefrom, bool recurs, bool checkExist = false);
   shared_me Get(const QString &name);
