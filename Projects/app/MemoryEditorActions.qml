@@ -12,7 +12,7 @@ Item {
         text: qsTr("&Add")
         onTriggered: {
             var me = memModel.getMeByIndex(treeView.currentIndex)
-            memEditor.add(me, "new", true);
+			memEditor.add(me, "new", false);
             //memModel.add(me, "new")
         }
     }

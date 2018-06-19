@@ -55,6 +55,7 @@ public:
 private:
   MEWrapper parent_;
   QString name_;
+  QString parentPath_;
   bool checkExist_ = true;
   MEWrapper newMe_;
 };
