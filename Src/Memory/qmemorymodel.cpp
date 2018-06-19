@@ -20,6 +20,7 @@
 
 QMemoryModel::QMemoryModel(QObject *parent) : MemoryWrapper(parent)
 {
+    headers = {tr("Name"), tr("Value"), tr("Path"), tr("Type")};
 }
 
 QMemoryModel::~QMemoryModel()
