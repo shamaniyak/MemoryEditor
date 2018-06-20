@@ -123,7 +123,6 @@ bool TME::addFrom(shared_me mefrom, shared_me me_to, bool recurs, bool checkExis
       auto m = mem();
       int id = m ? m->getWordIdx(me1->name()) : me1->id_name();
       me2 = TME::create(me_to, id, me1->val());
-      me_to->add(me2);
     }
     if(me2)
     {
@@ -251,7 +250,9 @@ int TME::size()
 
 TME::shared_me TME::create(shared_me parent, int id, QVariant val)
 {
-  return std::make_shared<TME>(parent, id, val);
+  shared_me me = std::make_shared<TME>(parent, id, val);
+  if(parent) parent->add(me);
+  return me;
 }
 
 void TME::setParent(shared_me parent)
@@ -355,7 +356,6 @@ void TME::Elements::load(QDataStream &ds, shared_me parent)
   for(int i =0; i <cnt; ++i)
   {
     auto me = TME::create(parent);
-    add(me);
     me->load(ds);
     me->getElements().load(ds, me);
   }

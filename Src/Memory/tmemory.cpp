@@ -67,9 +67,9 @@ TME::shared_me TAbstractMemory::createNew(TME::shared_me parent, int count)
 {
   if(!parent)
     parent = top_me_;
-  TME::shared_me me = nullptr;
+  TME::shared_me me;
   for(int i = 0; i < count; ++i) {
-    me = std::make_shared<TME>(parent);
+    me = TME::create(parent);
   }
   return me;
 }
@@ -115,7 +115,7 @@ TME::shared_me TAbstractMemory::getSelected() const
   return selected_.lock();
 }
 
-void TAbstractMemory::setSelected(TME::shared_me selected)
+void TAbstractMemory::setSelected(const TME::shared_me &selected)
 {
   selected_ = selected;
 }
@@ -147,7 +147,7 @@ TMemory::~TMemory()
 {
   if(getChanged() && autosave_)
     save();
-  setSelected(nullptr);
+  //setSelected(nullptr);
   //delete (TopME*)top_me_;
 }
 
@@ -158,7 +158,7 @@ void TMemory::init()
 
 void TMemory::CreateTopME()
 {
-  top_me_.reset(new TopME(this));
+  top_me_ = std::make_shared<TopME>(this);
   setSelected(top_me_);
 }
 
@@ -168,8 +168,6 @@ void TMemory::clear()
   id_names_.clear();
   words_.clear();
 }
-
-
 
 void TMemory::createBackup()
 {
@@ -266,29 +264,9 @@ TME::shared_me TMemory::add(TME::shared_me parent, const QString &name)
 
   me = createNew(parent);
   me->setName(name);
-  parent->add(me);
+  //parent->add(me);
 
   return me;
-}
-
-bool TMemory::addFromRecurse(TME::shared_me parent, TME::shared_me mefrom)
-{
-  if(!parent || !mefrom)
-    return false;
-  auto elements = mefrom->getElements();
-  for(int i =0; i <elements.count(); ++i)
-  {
-    auto me1 = elements.get(i);
-    auto me2 = add(parent, me1->name());//parent->Add(me1->name());
-    if(me2)
-    {
-      me2->setVal(me1->val());
-
-      addFromRecurse(me2, me1);
-    }
-  }
-
-  return true;
 }
 
 bool TMemory::addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs, bool checkExist)
@@ -299,31 +277,6 @@ bool TMemory::addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs,
     parent = getTopME();
 
   return parent->addFrom(mefrom, parent, recurs, checkExist);
-
-//  auto elements = mefrom->getElements();
-//  for(int i =0; i <elements.count(); ++i)
-//  {
-//    auto me1 = elements.get(i);
-//    TME::shared_me me2;
-//    if(checkExist)
-//      me2 = parent->Get(me1->name());
-//    if(!me2) {
-//      me2 = createNew(parent);
-//      if(me2)
-//      {
-//        parent->Add(me2);
-//        me2->setVal(me1->val());
-//      }
-//    }
-//    if(me2)
-//    {
-//      if(recurs)
-//        if(!addFrom(me2, me1, recurs, checkExist))
-//          return false;
-//    }
-//  }
-
-//  return true;
 }
 
 bool TMemory::del(const QString &path)
@@ -335,23 +288,10 @@ bool TMemory::del(const QString &path)
 
   if(me->parent())
   {
-    return me->parent()->del(me->name());
+    return me->parent()->del(me);
   }
 
   return false;
-}
-
-bool TMemory::edit(TME *me, const QString &new_name, QVariant new_val)
-{
-  if(!me)
-    return false;
-
-  me->setName(new_name);
-  me->setVal(new_val);
-
-//  do_change(me, EMemoryChange::mcEdt);
-
-  return true;
 }
 
 TME::shared_me TMemory::get(const QString &path)
@@ -381,7 +321,7 @@ TME::shared_me TMemory::getSubelement(TME::shared_me mep, const QString &name)
 QString TMemory::getElementPath(TME::shared_me me) const
 {
   if(!me)
-    return "";
+    return QString();
   else
   {
     QString res = getElementPath(me->parent());
@@ -396,7 +336,7 @@ QString TMemory::getWord(int idx) const
 {
   if(idx >=0 && idx <words_.size())
     return words_[idx];
-  return "";
+  return QString();
   //auto w = id_strings_.key(idx);
   //return w;
 }

@@ -53,7 +53,7 @@ public:
   TME::shared_me getTopME();
 
   TME::shared_me getSelected() const;
-  void setSelected(TME::shared_me getSelected);
+  void setSelected(const TME::shared_me &getSelected);
 
   bool getChanged() const;
   void setChanged(bool getChanged);
@@ -108,8 +108,6 @@ public:
   // Удалить элемент памяти
   bool del(const QString &path);
   //
-  bool edit(TME *me, const QString &new_name, QVariant new_val);
-  //
   TME::shared_me get(const QString &path);
   //
   TME::shared_me getSubelement(TME::shared_me mep, const QString &name);
@@ -149,8 +147,6 @@ protected:
   bool loadMemory();
 
   void saveBackup();
-
-  bool addFromRecurse(TME::shared_me parent, TME::shared_me mefrom);
 
   void createBackup();
 
