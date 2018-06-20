@@ -104,7 +104,7 @@ QString MEWrapper::getPath() const
 {
   if(isNull())
     return QString();
-  return me_->getPath();
+  return me_->path();
 }
 
 MEWrapper MEWrapper::add(const QString &name, bool checkExist)
@@ -124,7 +124,7 @@ bool MEWrapper::addFrom(MEWrapper &from, bool recurs)
 MEWrapper MEWrapper::get(const QString &name)
 {
   if(!isNull())
-    return mem_->CreateMEW(me_->Get(name));
+    return mem_->CreateMEW(me_->get(name));
   return MEWrapper();
 }
 

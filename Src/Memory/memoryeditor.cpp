@@ -109,7 +109,7 @@ public:
   {
     path_ = parent_.getPath();
     buf_->setMem(m->mem_.get());
-    buf_->addFrom(me_.getMe(), true);
+    buf_->addFrom(me_.getMe(), buf_, true);
   }
 
   virtual void undo() override
@@ -182,7 +182,7 @@ public:
     me_(me)
   {
     buf_->setMem(m->mem_.get());
-    buf_->addFrom(me_.getMe(), true);
+    buf_->addFrom(me_.getMe(), buf_, true);
   }
 
   virtual void undo() override

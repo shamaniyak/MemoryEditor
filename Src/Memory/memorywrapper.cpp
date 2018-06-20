@@ -88,7 +88,8 @@ bool MemoryWrapper::addFrom(const MEWrapper &parent, const MEWrapper &mefrom, bo
     int last = first + mefrom.count() - 1;
     beginInsertRows(parentIndex, first, last);
 
-    bool res = p.getMe()->addFrom(mefrom.getMe(), recurs, checkExist);
+    //bool res = p.getMe()->addFrom(mefrom.getMe(), recurs, checkExist);
+    bool res = mem_->addFrom(mefrom.getMe(), p.getMe(), recurs, checkExist);
 
     endInsertRows();
 
@@ -129,7 +130,7 @@ void MemoryWrapper::deleteMe(const MEWrapper &me)
 
     auto me1 = me.getMe();
     clearR(me1);
-    ev.parent.getMe()->Del(me1);
+    ev.parent.getMe()->del(me1);
 
     endRemoveRows();
 

@@ -34,6 +34,8 @@ struct TMEData
   QVariant val_;
 };
 
+// Базовый элемент
+// Для создания элемента верхнего уровня используйте TopME
 class TME
 {
 public:
@@ -47,7 +49,6 @@ public:
   struct Elements
   {
     Elements();
-    shared_me add(int id, shared_me parent);
     void add(const shared_me &me);
     int count() const;
     shared_me get(int i) const;
@@ -55,6 +56,7 @@ public:
     bool remove(const shared_me me);
     void clear();
     int get_index(const shared_me me) const;
+    int get_index(const TME* me) const;
     bool move(int from, int to);
 
     void load(QDataStream &ds, shared_me parent);
@@ -81,24 +83,25 @@ public:
   shared_me parent() const;
   void setParent(shared_me parent);
 
-  QString getPath() const;
+  QString path() const;
 
-  void Add(const shared_me &me);
-  bool addFrom(shared_me mefrom, bool recurs, bool checkExist = false);
-  shared_me Get(const QString &name);
-  bool Del(const QString &name);
-  bool Del(shared_me me);
+  void add(const shared_me &me);
+  bool addFrom(shared_me mefrom, shared_me me_to, bool recurs, bool checkExist = false);
+  shared_me get(const QString &name);
+  bool del(const QString &name);
+  bool del(const shared_me &me);
 
   void clear();
 
-  int get_index() const;
+  int getIndex() const;
 
-  bool move_to(shared_me parent, int pos=-1);
+  bool move_to(int pos=-1);
 
   void load(QDataStream &ds);
   void save(QDataStream &ds) const;
 
   int id_name() const;
+  void setIdName(int id);
 
   Elements& getElements();
 
@@ -108,8 +111,9 @@ public:
 
   static int size();
 
+  static shared_me create(shared_me parent, int id=-1, QVariant val=QVariant());
+
 protected:
-  void remove(const shared_me &me);
 
 private:
   int id_name_ = -1;// Любой айди или айди имени в общем массиве слов
