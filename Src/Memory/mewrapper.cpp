@@ -19,6 +19,7 @@
 #include "mewrapper.h"
 #include "tme.h"
 #include "memorywrapper.h"
+#include <QDebug>
 
 MEWrapper::MEWrapper()
 {
@@ -33,18 +34,30 @@ MEWrapper::MEWrapper(MemoryWrapper *mem)
 MEWrapper::MEWrapper(Memory::TME *me, MemoryWrapper *mem) :
   me_(me)
 {
+  if(me_)
+    qDebug() << "MEWrapper::MEWrapper(Memory::TME *me, MemoryWrapper *mem)" << me_.get() << me_.use_count();
   setMem(mem);
+}
+
+MEWrapper::MEWrapper(Memory::TME::shared_me me) :
+  me_(me)
+{
+  if(me_)
+    qDebug() << "MEWrapper::MEWrapper(Memory::TME::shared_me me)" << me_.get() << me_.use_count();
 }
 
 MEWrapper::MEWrapper(const MEWrapper &src)
 {
   this->mem_ = src.mem_;
   this->me_ = src.me_;
+  if(me_)
+    qDebug() << "MEWrapper::MEWrapper(const MEWrapper &src)" << me_.get() << me_.use_count();
 }
 
 MEWrapper::~MEWrapper()
 {
-
+  if(me_)
+    qDebug() << "MEWrapper::~MEWrapper()" << me_.get() << me_.use_count();
 }
 
 void MEWrapper::clear()
@@ -55,7 +68,7 @@ void MEWrapper::clear()
 
 Memory::TME *MEWrapper::getMe() const
 {
-  return me_;
+  return me_.get();
 }
 
 MemoryWrapper *MEWrapper::getMem() const

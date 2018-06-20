@@ -19,6 +19,7 @@
 #include "memoryeditor.h"
 
 #include <QUndoStack>
+#include <QDebug>
 
 class BaseCommand : public QUndoCommand
 {
@@ -27,7 +28,7 @@ public:
     m_(m) {  }
   explicit BaseCommand(MemoryWrapper *m, const QString &text, QUndoCommand *parent = Q_NULLPTR) : QUndoCommand(text, parent),
     m_(m) {  }
-  virtual ~BaseCommand() {  }
+  virtual ~BaseCommand() { qDebug() << text(); }
 
 protected:
   MemoryWrapper *m_ = nullptr;

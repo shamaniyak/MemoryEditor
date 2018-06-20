@@ -37,8 +37,8 @@ void TAbstractMemory::clear()
 {
   QMutexLocker mtxlock(&mtx_);
 
-  selected_ = top_me_;
-  top_me_->clear();
+  selected_ = getTopME();
+  selected_->clear();
 
   changed_ = true;
 }
@@ -66,7 +66,7 @@ void TAbstractMemory::clear()
 TME *TAbstractMemory::createNew(TME *parent, int count)
 {
   if(!parent)
-    parent = top_me_;
+    parent = getTopME();
   TME *me = nullptr;
   for(int i = 0; i < count; ++i)
     me = parent->Add("");
@@ -95,6 +95,11 @@ void TAbstractMemory::unlock(TME *me)
 }
 
 TME *TAbstractMemory::getTopME()
+{
+  return top_me_.get();
+}
+
+std::shared_ptr<TopME> TAbstractMemory::getSharedTopMe()
 {
   return top_me_;
 }
@@ -147,7 +152,7 @@ TMemory::~TMemory()
   if(getChanged() && autosave_)
     save();
   setSelected(nullptr);
-  delete (TopME*)top_me_;
+  //delete (TopME*)top_me_;
 }
 
 void TMemory::init()
@@ -157,8 +162,9 @@ void TMemory::init()
 
 void TMemory::CreateTopME()
 {
-  top_me_ = new TopME(this);
-  setSelected(top_me_);
+  //top_me_ = new TopME(this);
+  top_me_ = std::make_shared<TopME>(this);
+  setSelected(getTopME());
 }
 
 void TMemory::clear()
@@ -361,7 +367,7 @@ bool TMemory::edit(TME *me, const QString &new_name, QVariant new_val)
 TME *TMemory::get(const QString &path)
 {
   if(path.isEmpty())
-    return top_me_;
+    return getTopME();
 
   //path.remove()
   //for debug

@@ -21,6 +21,7 @@
 
 #include <QMap>
 #include <vector>
+#include <memory>
 #include "tmevalue.h"
 
 namespace Memory
@@ -38,6 +39,7 @@ class TME
 {
 public:
 
+  typedef std::shared_ptr<TME> shared_me;
   typedef QMap<int,TME*> elements_map;
   typedef std::vector<TME*> elements_vec;
 

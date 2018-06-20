@@ -7,12 +7,14 @@
 
 #include <memory>
 void test() {
-    std::shared_ptr<int> x(new int(5));
+    std::shared_ptr<int> x2;
     {
-        std::shared_ptr<int> x1(x.get());
-        qDebug() << *x1;
+      std::shared_ptr<int> x(new int(5));
+      x2 = x;
+      std::shared_ptr<int> x1(new int(15));
+      x = x1;
     }
-    qDebug() << *x;
+    qDebug() << *x2;
 }
 
 int main(int argc, char *argv[])
@@ -24,7 +26,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     MyApp myApp;
 
-    test();
+    //test();
 
     qmlRegisterUncreatableType<MyApp>("MyApp", 1, 0, "MyApp", "Can't creat MyApp");
 

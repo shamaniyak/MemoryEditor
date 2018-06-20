@@ -20,6 +20,7 @@
 #include "tmemory.h"
 
 //#include <algorithm>
+#include <QDebug>
 
 namespace Memory
 {
@@ -47,7 +48,8 @@ TME::TME(const TME &me)
 
 TME::~TME()
 {
-  clear();
+  qDebug() << "TME::~TME()" << this;
+  //clear();
 }
 
 TME &TME::operator=(const TME &me)
@@ -334,7 +336,7 @@ bool TME::Elements::remove(const TME *me)
   auto it = std::find(items_.begin(), items_.end(), me);
   if(it != items_.end())
   {
-    delete me;
+    //delete me;
     items_.erase(it);
     return true;
   }

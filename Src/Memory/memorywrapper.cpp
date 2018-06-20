@@ -30,8 +30,9 @@ MemoryWrapper::MemoryWrapper(QObject *parent) : QAbstractItemModel(parent),
 
 MemoryWrapper::~MemoryWrapper()
 {
-  clearDeleted();
-  clearMeWrappers();
+  //clearDeleted();
+  //clearMeWrappers();
+  clear();
 }
 
 MEWrapper MemoryWrapper::add(const MEWrapper &parent, const QString &name, bool checkExist)
@@ -115,7 +116,7 @@ void MemoryWrapper::deleteMe(const MEWrapper &me)
   {
     ChangeEvent ev;
     ev.type = EMemoryChange::mcDel;
-    //ev.me = me;
+    ev.me = me;
     //ev.me.me_ = nullptr;
     ev.parent = me.parent();
     ev.row = me.getIndex();
@@ -137,7 +138,8 @@ void MemoryWrapper::deleteMe(const MEWrapper &me)
 
 MEWrapper MemoryWrapper::getME() const
 {
-  return const_cast<MemoryWrapper*>(this)->CreateMEW(mem_->getTopME());
+  //return const_cast<MemoryWrapper*>(this)->CreateMEW(mem_->getTopME());
+  return MEWrapper(mem_->getSharedTopMe());
 }
 
 void MemoryWrapper::addCount(const MEWrapper &parent, int count)
@@ -280,8 +282,8 @@ void MemoryWrapper::setSelected(const MEWrapper &me)
   if(!me)
     return;
 
-  if(mem_->getSelected() != me.me_) {
-    mem_->setSelected(me.me_);
+  if(mem_->getSelected() != me.me_.get()) {
+    mem_->setSelected(me.me_.get());
 
     emit selectedChanged();
     doChange(me, EMemoryChange::mcSelect);
@@ -307,7 +309,7 @@ QModelIndex MemoryWrapper::getIndexByMe(const MEWrapper &me)
 MEWrapper MemoryWrapper::getMeByIndex(const QModelIndex &index) const
 {
   auto id = reinterpret_cast<Memory::TME*>(index.internalPointer());
-  return MEWrapper(id, const_cast<MemoryWrapper*>(this));
+  return const_cast<MemoryWrapper*>(this)->CreateMEW(id);
 }
 
 void MemoryWrapper::doChange(const MEWrapper &me, EMemoryChange idMsg)
@@ -388,11 +390,12 @@ void MemoryWrapper::clearR(Memory::TME *me)
 
 void MemoryWrapper::clearME1(Memory::TME *me)
 {
-  auto childs = me->getElements();
-  int cnt = childs.count();
+  auto me1 = CreateMEW(me);
+  int cnt = me1.count();
   for(int i = 0; i <cnt; ++i)
   {
-    clearR(childs.get(i));
+    auto me2 = me1.getByI(i);
+    clearR(me2.getMe());
   }
   me->clear();
 }

@@ -22,10 +22,7 @@
 #include <QObject>
 #include <QVariant>
 
-namespace Memory
-{
-  class TME;
-}
+#include "tme.h"
 
 class MemoryWrapper;
 
@@ -41,6 +38,7 @@ public:
   MEWrapper();
   MEWrapper(MemoryWrapper *mem);
   MEWrapper(Memory::TME *me, MemoryWrapper *mem = 0);
+  MEWrapper(Memory::TME::shared_me me);
   MEWrapper(const MEWrapper &src);
   ~MEWrapper();
 
@@ -87,7 +85,7 @@ protected:
   void deleteMe(MEWrapper &me);
 
 private:
-  Memory::TME *me_ = 0;
+  Memory::TME::shared_me me_ = 0;
   MemoryWrapper *mem_ = 0;
 
   friend class MemoryWrapper;

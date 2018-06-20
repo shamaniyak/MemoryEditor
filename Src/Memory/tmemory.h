@@ -43,6 +43,8 @@ public:
 // Содержит верхний элемент дерева
 class TAbstractMemory : public IMemory
 {
+  friend class MemoryWrapper;
+
 public:
   explicit TAbstractMemory();
   virtual ~TAbstractMemory();
@@ -51,6 +53,7 @@ public:
   void clear() override;
 
   TME* getTopME();
+  std::shared_ptr<TopME> getSharedTopMe();
 
   TME *getSelected() const;
   void setSelected(TME *getSelected);
@@ -61,7 +64,8 @@ public:
   TME * createNew(TME *parent=nullptr, int count = 1);
 
 protected:
-  TME *top_me_ = nullptr;
+  //TME *top_me_ = nullptr;
+  std::shared_ptr<TopME> top_me_;
 
   //  TAbstractMemory(const TAbstractMemory& src);
 //  TAbstractMemory& operator=(const TAbstractMemory& src);
@@ -81,6 +85,7 @@ private:
 class TMemory : public TAbstractMemory
 {
   friend class Backup;
+  friend class MemoryWrapper;
 
 public:
   explicit TMemory();
