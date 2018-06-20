@@ -117,7 +117,7 @@ public:
     parent_ = m_->get(path_);
     me_ = m_->add(parent_, name_, false);
     m_->move(me_, parent_, index_);
-    m_->addFrom(me_, MEWrapper(&buf_, m_), true);
+    m_->addFrom(me_, MEWrapper(buf_, m_), true);
   }
   virtual void redo() override
   {
@@ -181,13 +181,13 @@ public:
   ClearCommand(MemoryWrapper *m, const MEWrapper &me) : BaseCommand(m, "Clear"),
     me_(me)
   {
-    buf_.setMem(m->mem_.get());
-    buf_.addFrom(me_.getMe(), true);
+    buf_->setMem(m->mem_.get());
+    buf_->addFrom(me_.getMe(), true);
   }
 
   virtual void undo() override
   {
-    m_->addFrom(me_, MEWrapper(&buf_), true);
+    m_->addFrom(me_, MEWrapper(buf_), true);
   }
   virtual void redo() override
   {
@@ -196,7 +196,7 @@ public:
 
 private:
   MEWrapper me_;
-  Memory::TopME buf_;
+  Memory::TopME::shared_top_me buf_;
 };
 
 class MoveCommand : public BaseCommand

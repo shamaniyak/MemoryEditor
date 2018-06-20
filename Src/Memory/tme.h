@@ -93,7 +93,7 @@ public:
 
   int get_index() const;
 
-  bool move_to(TME *parent, int pos=-1);
+  bool move_to(shared_me parent, int pos=-1);
 
   void load(QDataStream &ds);
   void save(QDataStream &ds) const;
@@ -109,7 +109,7 @@ public:
   static int size();
 
 protected:
-  void remove(const TME *me);
+  void remove(const shared_me &me);
 
 private:
   int id_name_ = -1;// Любой айди или айди имени в общем массиве слов

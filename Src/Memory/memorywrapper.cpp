@@ -308,8 +308,8 @@ QModelIndex MemoryWrapper::getIndexByMe(const MEWrapper &me)
 
 MEWrapper MemoryWrapper::getMeByIndex(const QModelIndex &index) const
 {
-  auto id = reinterpret_cast<Memory::TME*>(index.internalPointer());
-  return MEWrapper(id, const_cast<MemoryWrapper*>(this));
+  auto id = reinterpret_cast<uint>(index.internalPointer());
+  return const_cast<MemoryWrapper*>(this)->getById(id);
 }
 
 void MemoryWrapper::doChange(const MEWrapper &me, EMemoryChange idMsg)
@@ -417,7 +417,8 @@ bool MemoryWrapper::move(const MEWrapper &me, const MEWrapper &parent, int pos)
       return false;
     beginMoveRows(source, row, row, source, destRow);
 
-    bool ok = me.getMe()->move_to(parent.getMe(), pos);
+    //bool ok = me.getMe()->move_to(parent.getMe(), pos);
+    bool ok = mem_->moveElement(parent.getMe(), me.getMe(), pos);
 
     endMoveRows();
 

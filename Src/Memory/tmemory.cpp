@@ -290,34 +290,39 @@ bool TMemory::addFromRecurse(TME::shared_me parent, TME::shared_me mefrom)
   return true;
 }
 
-bool TMemory::addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs)
+bool TMemory::addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs, bool checkExist)
 {
-  bool res = false;
   if(!mefrom)
-    return res;
+    return false;
   if(!parent)
     parent = getTopME();
 
-  return parent->addFrom(mefrom, recurs);
+  //return parent->addFrom(mefrom, recurs);
 
-//  auto elements = mefrom->getElements();
-//  for(int i =0; i <elements.count(); ++i)
-//  {
-//    auto me1 = elements.get(i);
-//    //auto me2 = parent->Get(me1->name());
-//    auto me2 = add(parent, me1->name());// parent->Add(me1->name());
-//    if(me2)
-//    {
-//      me2->setVal(me1->val());
+  auto elements = mefrom->getElements();
+  for(int i =0; i <elements.count(); ++i)
+  {
+    auto me1 = elements.get(i);
+    TME::shared_me me2;
+    if(checkExist)
+      me2 = parent->Get(me1->name());
+    if(!me2) {
+      me2 = createNew(parent);
+      if(me2)
+      {
+        parent->Add(me2);
+        me2->setVal(me1->val());
+      }
+    }
+    if(me2)
+    {
+      if(recurs)
+        if(!addFrom(me2, me1, recurs, checkExist))
+          return false;
+    }
+  }
 
-//      if(recurs)
-//        addFromRecurse(me2, me1);
-//    }
-//  }
-
-//  res = true;
-
-//  return res;
+  return true;
 }
 
 bool TMemory::del(const QString &path)
@@ -429,7 +434,7 @@ int TMemory::getWordIdx(const QString &w)
 //  return id;
 }
 
-bool TMemory::moveElement(TME *parent, TME *me, int idx)
+bool TMemory::moveElement(TME::shared_me parent, TME::shared_me me, int idx)
 {
   if(!parent || !me)
     return false;
@@ -552,6 +557,7 @@ bool TMemory::loadMemory()
 
   getTopME()->clear();
   getTopME()->load(in);
+  getTopME()->getElements().load(in, getTopME());
 
   // установить текущий
   auto me = getTopME();

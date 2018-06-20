@@ -104,7 +104,7 @@ public:
   // Добавить элемент памяти.
   // Если успешно, то указатель
   TME::shared_me add(TME::shared_me parent=nullptr, const QString &name="");
-  bool addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs);
+  bool addFrom(TME::shared_me parent, TME::shared_me mefrom, bool recurs, bool checkExist=false);
   // Удалить элемент памяти
   bool del(const QString &path);
   //
@@ -120,7 +120,7 @@ public:
   // Возвращает индекс слова в списке, если оно есть. Иначе индекс нового добавленного.
   int getWordIdx(const QString &w);
   //
-  bool moveElement(TME *parent, TME *me, int idx=-1);
+  bool moveElement(TME::shared_me parent, TME::shared_me me, int idx=-1);
 
   bool open(const QString &fileName);
 

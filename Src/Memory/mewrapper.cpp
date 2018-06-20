@@ -176,7 +176,7 @@ int MEWrapper::getIndex() const
 {
   if(!me_)
     return -1;
-  return me_->get_index();
+  return me_->parent() ? me_->parent()->getElements().get_index(me_) : -1;
 }
 
 bool MEWrapper::isNull() const
