@@ -168,22 +168,29 @@ public:
   ClearCommand(MemoryWrapper *m, const MEWrapper &me) : BaseCommand(m, "Clear"),
     me_(me)
   {
-    buf_->setMem(m->mem_.get());
-    buf_->addFrom(me_.getMe(), buf_, true);
+    //buf_->setMem(m->mem_.get());
+    //buf_->addFrom(me_.getMe(), buf_, true);
   }
 
   virtual void undo() override
   {
-    m_->addFrom(me_, MEWrapper(buf_), true);
+    for(int i = 0, cnt = buf_.size(); i < cnt; ++i) {
+      m_->add(me_, buf_[i]);
+    }
+    //m_->addFrom(me_, MEWrapper(buf_), true);
   }
   virtual void redo() override
   {
+    buf_.clear();
+    for(int i = 0, cnt = me_.count(); i < cnt; ++i)
+      buf_.push_back(me_.getByI(i));
     m_->clearMe(me_);
   }
 
 private:
   MEWrapper me_;
-  Memory::TopME::shared_top_me buf_;
+  QList<MEWrapper> buf_;
+  //Memory::TopME::shared_top_me buf_;
 };
 
 class MoveCommand : public BaseCommand

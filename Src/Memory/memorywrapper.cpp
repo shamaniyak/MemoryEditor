@@ -381,6 +381,7 @@ void MemoryWrapper::clearMe(const MEWrapper &me)
     beginRemoveRows(index, 0, me.count()-1);
 
     clearME1(me.getMe());
+    me.getMe()->clear();
 
     endRemoveRows();
 
@@ -409,7 +410,7 @@ void MemoryWrapper::clearME1(Memory::TME::shared_me me)
   {
     clearR(childs.get(i));
   }
-  me->clear();
+  //me->clear();
 }
 
 bool MemoryWrapper::move(const MEWrapper &me, const MEWrapper &parent, int pos)
