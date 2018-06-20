@@ -114,6 +114,7 @@ public slots:
 
   void addCount(const MEWrapper &parent, int count = 1);
   MEWrapper add(const MEWrapper &parent, const QString &name, bool checkExist = true);
+  void add(const MEWrapper &parent, const MEWrapper &me);
   bool addFrom(const MEWrapper &parent, const MEWrapper &mefrom, bool recurs, bool checkExist = false);
   // Удалить элемент памяти
   void del(const QString &path);

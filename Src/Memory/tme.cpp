@@ -20,6 +20,7 @@
 #include "tmemory.h"
 
 //#include <algorithm>
+#include <QDebug>
 
 namespace Memory
 {
@@ -44,6 +45,7 @@ TME::TME(const TME &me)
 
 TME::~TME()
 {
+  qDebug() << "TME::~TME()";
   clear();
 }
 

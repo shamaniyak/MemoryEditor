@@ -77,7 +77,7 @@ void MEWrapper::deleteMe(MEWrapper &me)
 QString MEWrapper::name() const
 {
   if(isNull())
-    return "";
+    return QString();
   return me_->name();
 }
 
@@ -141,7 +141,7 @@ void MEWrapper::del(const QString &name)
 {
   if(isNull())
     return;
-  auto me = get(name); //me_->Get(name);
+  auto me = get(name);
   deleteMe(me);
 }
 
@@ -183,6 +183,5 @@ bool MEWrapper::isNull() const
 {
   if(me_ && mem_)
     return false;
-    //return(!mem_->getById(reinterpret_cast<uint>(me_)));
   return(true);
 }
