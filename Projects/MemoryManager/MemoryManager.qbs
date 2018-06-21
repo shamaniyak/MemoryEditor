@@ -11,12 +11,12 @@ DynamicLibrary {
 	property string putOverBinSubdir: "qml/MemoryManager"
 	property string prefix: ""
 	property stringList addIncludes: []
-	property stringList defines: []
+	property stringList defines: ["BUILD_MEMORY_LIB"]
 	property stringList staticLibraries: []
 	property stringList libraryPaths: []
 
 	cpp.includePaths: [project.globalPath, project.globalIncludePath]
-	//cpp.defines: project.buildWithEasyProfiler ? defines.concat(["BUILD_WITH_EASY_PROFILER"]) : defines
+	cpp.defines: project.buildWithEasyProfiler ? defines.concat(["BUILD_WITH_EASY_PROFILER"]) : defines
 	cpp.cxxLanguageVersion: "c++11"
 	//destinationDirectory: FileInfo.joinPaths(project.globalModulesPath,prefix,name)
 	//cpp.debugInformation: project.generatePDB

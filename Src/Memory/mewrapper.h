@@ -23,16 +23,12 @@
 #include <QVariant>
 #include <memory>
 
+#include "memoryglobal.h"
 #include "tme.h"
-
-//namespace Memory
-//{
-//  class TME;
-//}
 
 class MemoryWrapper;
 
-class MEWrapper
+class MEMORY_EXPORT MEWrapper
 {
   Q_GADGET
   Q_PROPERTY(QString name READ name WRITE setName)

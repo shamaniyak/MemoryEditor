@@ -17,6 +17,7 @@ void test() {
 
 }
 
+#if !defined(RAN_AS_TEST)
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)
@@ -39,3 +40,4 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+#endif

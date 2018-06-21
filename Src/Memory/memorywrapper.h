@@ -32,7 +32,6 @@
 
 #include "tmemory.h"
 #include "mewrapper.h"
-//#include "qmemorymodel.h"
 
 namespace Memory
 {
@@ -68,7 +67,7 @@ public:
   int getType() {return type;}
 };
 
-class MemoryWrapper : public QAbstractItemModel
+class MEMORY_EXPORT MemoryWrapper : public QAbstractItemModel
 {
   Q_OBJECT
   Q_PROPERTY(MEWrapper me READ getME)

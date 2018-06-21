@@ -19,9 +19,10 @@
 #ifndef QMEMORYMODEL_H
 #define QMEMORYMODEL_H
 
+#include "memoryglobal.h"
 #include "memorywrapper.h"
 
-class QMemoryModel : public MemoryWrapper
+class MEMORY_EXPORT QMemoryModel : public MemoryWrapper
 {
   Q_OBJECT
 
