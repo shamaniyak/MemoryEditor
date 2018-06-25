@@ -38,6 +38,7 @@ MemoryWrapper::~MemoryWrapper()
 
 MEWrapper MemoryWrapper::add(const MEWrapper &parent, const QString &name, bool checkExist)
 {
+  qDebug() << "MemoryWrapper::add begin";
   MEWrapper me;
   auto p = parent;
   // если парент не задан, то парентом будет корневой элемент
@@ -65,7 +66,7 @@ MEWrapper MemoryWrapper::add(const MEWrapper &parent, const QString &name, bool 
       }
     }
   }
-
+  qDebug() << "MemoryWrapper::add end";
   return me;
 }
 
@@ -509,11 +510,11 @@ void MemoryWrapper::clearMeWrappers()
   map_mew_.clear();
 }
 
-MEWrapper MemoryWrapper::CreateMEW(Memory::TME::shared_me me)
+MEWrapper MemoryWrapper::CreateMEW(const Memory::TME::shared_me &me)
 {
-  MEWrapper resMe;
+  qDebug() << "MemoryWrapper::CreateMEW" << me.get() << me.use_count();
   if(!me)
-    return resMe;
+    return MEWrapper();
 
   if(!map_mew_.contains(me.get()))
     map_mew_[me.get()] = MEWrapper(me, this);

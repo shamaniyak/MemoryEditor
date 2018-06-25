@@ -20,6 +20,8 @@
 #include "tme.h"
 #include "memorywrapper.h"
 
+#include <QDebug>
+
 MEWrapper::MEWrapper()
 {
 
@@ -30,9 +32,11 @@ MEWrapper::MEWrapper(MemoryWrapper *mem)
   setMem(mem);
 }
 
-MEWrapper::MEWrapper(Memory::TME::shared_me me, MemoryWrapper *mem) :
+MEWrapper::MEWrapper(const Memory::TME::shared_me &me, MemoryWrapper *mem) :
   me_(me)
 {
+  if(me_)
+    qDebug() << "MEWrapper" << me_.get() << me_.use_count();
   setMem(mem);
 }
 
@@ -40,17 +44,14 @@ MEWrapper::MEWrapper(const MEWrapper &src)
 {
   this->mem_ = src.mem_;
   this->me_ = src.me_;
+  if(me_)
+    qDebug() << "MEWrapper copy" << me_.get() << me_.use_count();
 }
 
 MEWrapper::~MEWrapper()
 {
-
-}
-
-void MEWrapper::clear()
-{
-  if(!isNull())
-    mem_->clearMe(*this);
+  if(me_)
+    qDebug() << "~MEWrapper" << me_.get() << me_.use_count()-1;
 }
 
 Memory::TME::shared_me MEWrapper::getMe() const
@@ -156,6 +157,12 @@ void MEWrapper::delByI(int i)
 void MEWrapper::delByMe(MEWrapper &me)
 {
   deleteMe(me);
+}
+
+void MEWrapper::clear()
+{
+  if(!isNull())
+    mem_->clearMe(*this);
 }
 
 MEWrapper MEWrapper::parent() const

@@ -50,7 +50,7 @@ public:
 
   void clear() override;
 
-  TME::shared_me getTopME();
+  TME::shared_me getTopME() const;
 
   TME::shared_me getSelected() const;
   void setSelected(const TME::shared_me &getSelected);

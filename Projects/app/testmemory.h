@@ -12,7 +12,9 @@ public:
 signals:
 
 private slots:
+  void testCreateMemory();
     void testTopMe();
+    void testMEWrapper();
 };
 
 #endif // TESTMEMORY_H

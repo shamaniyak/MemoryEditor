@@ -95,7 +95,7 @@ void TAbstractMemory::unlock(TME *me)
   em_.unlock(me);
 }
 
-TME::shared_me TAbstractMemory::getTopME()
+TME::shared_me TAbstractMemory::getTopME() const
 {
   return top_me_;
 }

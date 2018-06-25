@@ -6,20 +6,20 @@ Item {
 	id: editor
 	anchors.fill: parent
 	property var memModel
-    //readonly property var actions: meActions
+	//readonly property var actions: meActions
 
-    // Редактор для памяти (набор команд)
-    MemoryEditor {
-        id: memEditor
-        mem: memModel
-    }
+	// Редактор для памяти (набор команд)
+	MemoryEditor {
+		id: memEditor
+		mem: memModel
+	}
 
-    property MemoryEditorActions actions: MemoryEditorActions {
-        id: meActions
-        memModel: editor.memModel
-        treeView: treeView
-        memEditor: memEditor
-    }
+	property MemoryEditorActions actions: MemoryEditorActions {
+		id: meActions
+		memModel: editor.memModel
+		treeView: treeView
+		memEditor: memEditor
+	}
 
 	GridLayout {
 		anchors.fill: parent
@@ -33,18 +33,20 @@ Item {
 			// Контекстное меню для дерева
 			treeMenu: TreePopupMenu {
 				id: treeMenu
-                actions: editor.actions
+				actions: editor.actions
 			}
 
 			onNameChanged: {
 				var me = model.getMeByIndex(index)
 				if(me)
 					me.name = newName
+				me = undefined
 			}
 
 			onClicked: {
 				var me = model.getMeByIndex(index)
 				model.selected = me
+				me = undefined
 			}
 		}
 

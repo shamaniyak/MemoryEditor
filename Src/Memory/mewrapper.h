@@ -28,6 +28,9 @@
 
 class MemoryWrapper;
 
+// Удобная обертка для работы с TME.
+// Нужна для QML.
+// Работает через указатель на MemoryWrapper
 class MEMORY_EXPORT MEWrapper
 {
   Q_GADGET
@@ -39,11 +42,9 @@ class MEMORY_EXPORT MEWrapper
 public:
   MEWrapper();
   MEWrapper(MemoryWrapper *mem);
-  MEWrapper(Memory::TME::shared_me me, MemoryWrapper *mem = 0);
+  MEWrapper(const Memory::TME::shared_me &me, MemoryWrapper *mem = 0);
   MEWrapper(const MEWrapper &src);
   ~MEWrapper();
-
-  void clear();
 
   Memory::TME::shared_me getMe() const;
 
@@ -66,6 +67,7 @@ public:
   void del(const QString &name);
   void delByI(int i);
   void delByMe(MEWrapper &me);
+  void clear();
 
   MEWrapper parent() const;
 

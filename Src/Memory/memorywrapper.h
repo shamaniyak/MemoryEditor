@@ -84,7 +84,7 @@ public:
   // Корневой элемент
   MEWrapper getME() const;
 
-  MEWrapper CreateMEW(Memory::TME::shared_me me);
+  MEWrapper CreateMEW(const Memory::TME::shared_me &me);
   void DeleteMEW(Memory::TME::shared_me me);
 
   void doChange(const ChangeEvent &ev);
