@@ -10,10 +10,9 @@ Item {
     property Action addAction: Action {
         id: addAction
         text: qsTr("&Add")
-        onTriggered: {
+		onTriggered: {
             var me = memModel.getMeByIndex(treeView.currentIndex)
             memEditor.add(me, "new", true);
-            //memModel.add(me, "new")
         }
     }
     // removeAction

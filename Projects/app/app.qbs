@@ -22,7 +22,7 @@ CppApplication {
 		// deprecated API in order to know how to port your code away from it.
 		"QT_DEPRECATED_WARNINGS",
 
-        "RAN_AS_TEST",
+		//"RAN_AS_TEST",
 
 		// You can also make your code fail to compile if you use deprecated APIs.
 		// In order to do so, uncomment the following line.

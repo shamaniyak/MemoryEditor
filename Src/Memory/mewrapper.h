@@ -83,6 +83,8 @@ public:
   bool operator ==(MEWrapper const& r) const { return getMe() == r.getMe(); }
   bool operator !=(MEWrapper const& r) const { return !(*this == r); }
 
+  MEWrapper &operator =(const MEWrapper &src);
+
 protected:
   void setMem(MemoryWrapper *mem);
   void deleteMe(MEWrapper &me);

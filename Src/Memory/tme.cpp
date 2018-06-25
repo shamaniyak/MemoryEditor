@@ -52,7 +52,7 @@ TME::TME(const TME &me)
 TME::~TME()
 {
   --countInstances;
-  qDebug() << "TME::~TME()" << this << countInstances;
+  qDebug() << "~TME()" << this << countInstances;
   clear();
 }
 

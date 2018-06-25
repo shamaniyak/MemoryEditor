@@ -80,6 +80,14 @@ Item {
         }
 	}
 
+	// Garbage collector action
+	property Action actionGC: Action {
+		text: qsTr("GC")
+		onTriggered: {
+			gc()
+		}
+	}
+
     OpenMemoryDialog {
         id: fileDialog
         memModel: root.memModel

@@ -15,6 +15,7 @@ private slots:
   void testCreateMemory();
     void testTopMe();
     void testMEWrapper();
+    void testDeleteMEWrapper();
 };
 
 #endif // TESTMEMORY_H

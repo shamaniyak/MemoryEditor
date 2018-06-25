@@ -32,6 +32,20 @@ void TestMemory::testMEWrapper()
   QCOMPARE(me.name(), "new");
 }
 
+void TestMemory::testDeleteMEWrapper()
+{
+    QMemoryModel memory;
+    MEWrapper me;
+    {
+        me = memory.add(MEWrapper(), "new");
+        memory.deleteMe(me);
+        me = MEWrapper();
+    }
+    QVERIFY(!me);
+    me = memory.get("new");
+    QVERIFY(!me);
+}
+
 #if defined(RAN_AS_TEST)
 QTEST_MAIN(TestMemory)
 #endif

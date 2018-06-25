@@ -11,6 +11,18 @@ ApplicationWindow {
 	height: 480
 	title: qsTr("Memory Editor")
 	property string appDirPath
+
+	Component.onCompleted: {
+		//console.log()
+		appDirPath = app.applicationDirPath()
+		//memModel.open(appDirPath + "/memory.moi")
+	}
+
+	onClosing: {
+		close.accepted = false
+		fileActions.actionQuit.trigger(mainWindow)
+	}
+
 	menuBar: MainMenu {
 		actionsFile: fileActions
 		actionsEditor: editor.actions
@@ -33,16 +45,13 @@ ApplicationWindow {
     MemoryEditorDialog {
 		id: editor
 		memModel: memModel
-    }
-
-	Component.onCompleted: {
-		//console.log()
-		appDirPath = app.applicationDirPath()
-        //memModel.open(appDirPath + "/memory.moi")
 	}
 
-	onClosing: {
-        close.accepted = false
-        fileActions.actionQuit.trigger(mainWindow)
+	// Запуск сборщика мусора вручную так сказать, но вроде как не нужно
+	Timer {
+		interval: 1000
+		running: false
+		repeat: true
+		onTriggered: gc()
 	}
 }

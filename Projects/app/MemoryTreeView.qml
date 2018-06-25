@@ -8,6 +8,10 @@ TreeView {
 
 	signal nameChanged(var index, var newName)
 
+	onDoubleClicked: {
+		//firstColumn.delegate = itemDelegate.createObject(firstColumn)
+	}
+
 	TableViewColumn {
 		id: firstColumn
 		title: "Name"
@@ -69,9 +73,5 @@ TreeView {
 				}
 			}
 		}
-	}
-
-	onDoubleClicked: {
-		//firstColumn.delegate = itemDelegate.createObject(firstColumn)
 	}
 }

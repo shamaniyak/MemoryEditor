@@ -35,23 +35,18 @@ MEWrapper::MEWrapper(MemoryWrapper *mem)
 MEWrapper::MEWrapper(const Memory::TME::shared_me &me, MemoryWrapper *mem) :
   me_(me)
 {
-  if(me_)
-    qDebug() << "MEWrapper" << me_.get() << me_.use_count();
+  //if(me_) qDebug() << "MEWrapper" << me_.get() << me_.use_count();
   setMem(mem);
 }
 
 MEWrapper::MEWrapper(const MEWrapper &src)
 {
-  this->mem_ = src.mem_;
-  this->me_ = src.me_;
-  if(me_)
-    qDebug() << "MEWrapper copy" << me_.get() << me_.use_count();
+  *this = src;
 }
 
 MEWrapper::~MEWrapper()
 {
-  if(me_)
-    qDebug() << "~MEWrapper" << me_.get() << me_.use_count()-1;
+  //if(me_) qDebug() << "~MEWrapper" << me_.get() << me_.use_count()-1;
 }
 
 Memory::TME::shared_me MEWrapper::getMe() const
@@ -191,4 +186,12 @@ bool MEWrapper::isNull() const
   if(me_ && mem_)
     return false;
   return(true);
+}
+
+MEWrapper &MEWrapper::operator =(const MEWrapper &src)
+{
+    this->mem_ = src.mem_;
+    this->me_ = src.me_;
+    //qDebug() << "MEWrapper =" << me_.get() << me_.use_count();
+    return *this;
 }
