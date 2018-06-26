@@ -24,6 +24,19 @@ void TestMemory::testTopMe()
   QCOMPARE(me.name(), "");
 }
 
+void TestMemory::testSelected()
+{
+  QMemoryModel memory;
+  memory.setSelected(memory.getME());
+  QCOMPARE(memory.getSelected(), memory.getME());
+
+  memory.setSelected(memory.getME());
+  MEWrapper me = memory.getSelected();
+  MEWrapper me1 = memory.add(MEWrapper(), "test");
+  memory.setSelected(me1);
+  QVERIFY(me != me1);
+}
+
 void TestMemory::testMEWrapper()
 {
   QMemoryModel memory;

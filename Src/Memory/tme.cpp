@@ -31,20 +31,20 @@ TME::TME():
   id_name_(-1)
 {
   ++countInstances;
-  qDebug() << "TME" << countInstances;
+  //qDebug() << "TME" << countInstances;
 }
 
 TME::TME(shared_me parent, int id_name, QVariant val):
   id_name_(id_name), val_(val), parent_(parent)
 {
   ++countInstances;
-  qDebug() << "TME" << countInstances;
+  //qDebug() << "TME" << countInstances;
 }
 
 TME::TME(const TME &me)
 {
   ++countInstances;
-  qDebug() << "TME" << countInstances;
+  //qDebug() << "TME" << countInstances;
   parent_ = me.parent_;
   *this = me;
 }
@@ -52,7 +52,7 @@ TME::TME(const TME &me)
 TME::~TME()
 {
   --countInstances;
-  qDebug() << "~TME()" << this << countInstances;
+  //qDebug() << "~TME()" << this << countInstances;
   clear();
 }
 

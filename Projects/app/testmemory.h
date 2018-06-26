@@ -14,6 +14,7 @@ signals:
 private slots:
   void testCreateMemory();
     void testTopMe();
+    void testSelected();
     void testMEWrapper();
     void testDeleteMEWrapper();
 };

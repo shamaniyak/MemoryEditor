@@ -26,9 +26,7 @@ TreeView {
 		anchors.fill: parent
 		acceptedButtons: Qt.LeftButton | Qt.RightButton
 		onPressed: {
-			var index = tree.indexAt(mouse.x, mouse.y)
-			var me = model.getMeByIndex(index)
-			model.selected = me
+			//select(mouse)
 			showPopupMenu(mouse)
 			mouse.accepted = false
 		}
@@ -39,6 +37,12 @@ TreeView {
 				return true
 			}
 			return false
+		}
+
+		function select(mouse) {
+			var index = tree.indexAt(mouse.x, mouse.y)
+			var me = model.getMeByIndex(index)
+			model.selected = me
 		}
 	}
 

@@ -1,10 +1,10 @@
-import qbs
+﻿import qbs
 import qbs.FileInfo
 
 CppApplication {
 	Depends { name: "Qt"; submodules: ["core", "quick", "qml"] }
-    Depends { name: "MemoryManager" }
-    Depends { name: "Qt.testlib" }
+	Depends { name: "MemoryManager" }
+	Depends { name: "Qt.testlib" }
 
 	// Additional import path used to resolve QML modules in Qt Creator's code model
 	property pathList qmlImportPaths: [project.globalModulesPath, "../../bin/qml/"]
@@ -31,20 +31,20 @@ CppApplication {
 	]
 
 	files: [
-        "main.cpp",
-        "myapp.cpp",
-        "myapp.h",
-        "qml.qrc",
-    ]
+		"main.cpp",
+		"myapp.cpp",
+		"myapp.h",
+		"qml.qrc",
+	]
 
-    Group {
-        name: "Test files"
-        condition: cpp.defines.contains("RAN_AS_TEST")
-        files: [
-            "testmemory.cpp",
-            "testmemory.h",
-        ]
-    }
+	Group {
+		name: "Test files"
+		condition: cpp.defines.contains("RAN_AS_TEST")
+		files: [
+			"testmemory.cpp",
+			"testmemory.h",
+		]
+	}
 
 	Group {     // Properties for the produced executable
 		fileTagsFilter: "application"

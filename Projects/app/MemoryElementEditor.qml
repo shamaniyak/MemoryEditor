@@ -4,17 +4,22 @@ import QtQuick.Controls 2.3
 Item {
 	id: root
 	property var memModel
-	property var selected
+	property var me
 	//property var memEditor
 
-	onSelectedChanged: {
-		showSelectedValue()
+	onMemModelChanged: {
+		if(memModel)
+			me = memModel.selected
 	}
 
-	function showSelectedValue() {
+//	onSelectedChanged: {
+//		showSelectedValue()
+//	}
+
+	function showValue() {
 		//console.debug("selected = ", selected)
-		if(selected != null && selected.val != undefined)
-			edit.showText(selected.val)
+		if(me != null && me.val != undefined)
+			edit.showText(me.val)
 		else
 			edit.showText("")
 	}
@@ -22,24 +27,22 @@ Item {
 	Connections {
 		target: root.memModel
 		onValueChanged: {
-			if(me==selected)
-				showSelectedValue()
+			if(me==root.me)
+				showValue()
 		}
 		onSelectedChanged: {
-			doSave()
-			selected = memModel ? memModel.selected : undefined
-			//showSelectedValue()
+			showValue()
 		}
 	}
 
 	function doSave() {
-		console.debug("doSave")
-		timer.stop()
-		if(selected) {
+		//console.debug("doSave")
+		//console.trace()
+		if(me) {
 			if(memEditor)
-				memEditor.setVal(selected, edit.text)
+				memEditor.setVal(me, edit.text)
 			else
-				selected.val = edit.text
+				me.val = edit.text
 		}
 	}
 
@@ -79,7 +82,7 @@ Item {
 			}
 
 			onTextChanged: {
-				console.debug("textChanged")
+				//console.debug("textChanged")
 				if(canChange) {
 					timer.stop()
 					timer.start()
@@ -87,7 +90,11 @@ Item {
 			}
 
 			onEditingFinished: {
-				//doSave()
+				//console.debug("onEditingFinished")
+				if(timer.running) {
+					timer.stop()
+					doSave()
+				}
 			}
 
 			onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
