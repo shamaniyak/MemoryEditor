@@ -50,6 +50,7 @@ private:
   Q_PROPERTY(int type READ getType)
   Q_PROPERTY(int row MEMBER row)
   Q_PROPERTY(QString path MEMBER path)
+  Q_PROPERTY(MEWrapper me MEMBER me)
 public:
   EMemoryChange type = mcNone;
   MEWrapper me;
@@ -108,6 +109,7 @@ signals:
   void change(const ChangeEvent &ev);
   void selectedChanged();
   void filePathChanged(QString filePath);
+  void valueChanged(const MEWrapper &me);
 
 public slots:
 

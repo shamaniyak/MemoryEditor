@@ -30,19 +30,21 @@ ApplicationWindow {
 
 	FileActions {
 		id: fileActions
-        memModel: memModel
+		memModel: memModel
 	}
 
 	// Модель
 	MemoryModel {
 		id: memModel
-        onChange: {
-            console.log(ev)
-        }
-    }
+		property var eMemoryChange: ["mcNone", "mcAdd", "mcAddFrom", "mcDel", "mcEditName", "mcEditVal", "mcUpdate", "mcSelect", "mcClear", "mcMove"]
+		onChange: {
+			var mct = eMemoryChange[ev.type]
+			console.log(mct, ev, ev.me)
+		}
+	}
 
-    // Диалог Редактора памяти
-    MemoryEditorDialog {
+	// Диалог Редактора памяти
+	MemoryEditorDialog {
 		id: editor
 		memModel: memModel
 	}

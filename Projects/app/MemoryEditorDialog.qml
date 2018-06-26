@@ -5,7 +5,7 @@ import MemoryManager 1.0
 Item {
 	id: editor
 	anchors.fill: parent
-	property var memModel
+	property MemoryModel memModel
 	//readonly property var actions: meActions
 
 	// Редактор для памяти (набор команд)
@@ -37,9 +37,13 @@ Item {
 			}
 
 			onNameChanged: {
-				var me = model.getMeByIndex(index)
-				if(me)
-					me.name = newName
+				var me = memModel.getMeByIndex(index)
+				if(me) {
+					if(memEditor)
+						memEditor.setName(me, newName)
+					else
+						me.name = newName
+				}
 				me = undefined
 			}
 
@@ -54,6 +58,7 @@ Item {
 		MemoryElementEditor {
 			id: meEditor
 			memModel: editor.memModel
+			//memEditor: memEditor
 			Layout.fillHeight: true
 			Layout.fillWidth: true
 		}

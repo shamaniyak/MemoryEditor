@@ -73,7 +73,7 @@ private:
 class AddFromCommand : public BaseCommand
 {
 public:
-  AddFromCommand(MemoryWrapper *m, MEWrapper &parent, MEWrapper &from, bool recurs) : BaseCommand(m, "AddFrom"),
+  AddFromCommand(MemoryWrapper *m, MEWrapper &parent, const MEWrapper &from, bool recurs) : BaseCommand(m, "AddFrom"),
     parent_(parent), from_(from), recurs_(recurs)
   {
     beginIndex_ = parent_.count();
@@ -123,7 +123,7 @@ private:
 class EditNameCommand : public BaseCommand
 {
 public:
-  EditNameCommand(MemoryWrapper *m, MEWrapper &me, const QString &name) :
+  EditNameCommand(MemoryWrapper *m, const MEWrapper &me, const QString &name) :
     BaseCommand(m, "EditName"), me_(me), newName_(name), oldName_(me.name())
   {  }
 
@@ -144,7 +144,7 @@ private:
 class EditValCommand : public BaseCommand
 {
 public:
-  EditValCommand(MemoryWrapper *m, MEWrapper &me, const QVariant &val) :
+  EditValCommand(MemoryWrapper *m, const MEWrapper &me, const QVariant &val) :
     BaseCommand(m, "EditVal"), me_(me), newVal_(val), oldVal_(me.val())
   {  }
 
@@ -236,7 +236,7 @@ void MemoryEditor::add(const MEWrapper &parent, const QString &name, bool checkE
   }
 }
 
-void MemoryEditor::addFrom(MEWrapper &parent, MEWrapper &mefrom, bool recurs)
+void MemoryEditor::addFrom(MEWrapper &parent, const MEWrapper &mefrom, bool recurs)
 {
   if(!mem_) return;
   if(!parent)
@@ -269,7 +269,7 @@ void MemoryEditor::deleteMe(MEWrapper me)
   }
 }
 
-void MemoryEditor::setName(MEWrapper &me, const QString &name)
+void MemoryEditor::setName(const MEWrapper &me, const QString &name)
 {
   if(mem_ && me)
   {
@@ -281,7 +281,7 @@ void MemoryEditor::setName(MEWrapper &me, const QString &name)
   }
 }
 
-void MemoryEditor::setVal(MEWrapper &me, const QVariant &val)
+void MemoryEditor::setVal(const MEWrapper &me, const QVariant &val)
 {
   if(mem_ && me)
   {

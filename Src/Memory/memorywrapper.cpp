@@ -265,6 +265,7 @@ void MemoryWrapper::setVal(const MEWrapper &me, const QVariant &val)
     dataChanged(index, index, {ValueColumn});
 
     doChange(ev);
+    emit valueChanged(me);
   }
 }
 
@@ -293,14 +294,14 @@ void MemoryWrapper::setName(const MEWrapper &me, const QString &name)
 
 void MemoryWrapper::setSelected(const MEWrapper &me)
 {
-  if(!me)
-    return;
+  MEWrapper me1;
+  if(me) me1 = me;
+  else me1 = getME();
+  if(mem_->getSelected() != me1.getMe()) {
+    mem_->setSelected(me1.getMe());
 
-  if(mem_->getSelected() != me.me_) {
-    mem_->setSelected(me.me_);
-
+    doChange(me1, EMemoryChange::mcSelect);
     emit selectedChanged();
-    doChange(me, EMemoryChange::mcSelect);
   }
 }
 
@@ -373,8 +374,8 @@ void MemoryWrapper::doChange(const ChangeEvent &ev)
 void MemoryWrapper::clear()
 {
   getME().setVal(QVariant());
-  clearMe(getME());
   setSelected(getME());
+  clearMe(getME());
 }
 
 void MemoryWrapper::clearMe(const MEWrapper &me)

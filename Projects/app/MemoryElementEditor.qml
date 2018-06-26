@@ -2,8 +2,46 @@
 import QtQuick.Controls 2.3
 
 Item {
+	id: root
 	property var memModel
-	property var selected: null//memModel ? memModel.selected : null
+	property var selected
+	//property var memEditor
+
+	onSelectedChanged: {
+		showSelectedValue()
+	}
+
+	function showSelectedValue() {
+		//console.debug("selected = ", selected)
+		if(selected != null && selected.val != undefined)
+			edit.showText(selected.val)
+		else
+			edit.showText("")
+	}
+
+	Connections {
+		target: root.memModel
+		onValueChanged: {
+			if(me==selected)
+				showSelectedValue()
+		}
+		onSelectedChanged: {
+			doSave()
+			selected = memModel ? memModel.selected : undefined
+			//showSelectedValue()
+		}
+	}
+
+	function doSave() {
+		console.debug("doSave")
+		timer.stop()
+		if(selected) {
+			if(memEditor)
+				memEditor.setVal(selected, edit.text)
+			else
+				selected.val = edit.text
+		}
+	}
 
 	Flickable {
 		id: flick
@@ -32,25 +70,33 @@ Item {
 			//wrapMode: TextEdit.Wrap
 			//anchors.fill: parent
 			placeholderText: qsTr("Input value here")
+			property bool canChange
+
+			function showText(_text) {
+				canChange = false
+				text = _text
+				canChange = true
+			}
 
 			onTextChanged: {
-
+				console.debug("textChanged")
+				if(canChange) {
+					timer.stop()
+					timer.start()
+				}
 			}
 
 			onEditingFinished: {
-				doSave()
+				//doSave()
 			}
 
 			onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
-
-			function doSave() {
-				if(selected)
-					selected.val = text
-			}
 		}
 	}
-
-	onSelectedChanged: {
-		edit.text = selected ? selected.val ? selected.val : "" : ""
+	// Таймер для отложенного сохранения
+	Timer {
+		id: timer
+		interval: 1000
+		onTriggered: doSave()
 	}
 }

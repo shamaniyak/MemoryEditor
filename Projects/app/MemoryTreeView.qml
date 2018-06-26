@@ -26,6 +26,9 @@ TreeView {
 		anchors.fill: parent
 		acceptedButtons: Qt.LeftButton | Qt.RightButton
 		onPressed: {
+			var index = tree.indexAt(mouse.x, mouse.y)
+			var me = model.getMeByIndex(index)
+			model.selected = me
 			showPopupMenu(mouse)
 			mouse.accepted = false
 		}

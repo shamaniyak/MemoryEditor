@@ -48,11 +48,11 @@ signals:
 
 public slots:
   void add(const MEWrapper &parent, const QString &name, bool checkExist = true);
-  void addFrom(MEWrapper &parent, MEWrapper &mefrom, bool recurs);
+  void addFrom(MEWrapper &parent, const MEWrapper &mefrom, bool recurs);
   void del(const QString &path);
   void deleteMe(MEWrapper me);
-  void setName(MEWrapper &me, const QString &name);
-  void setVal(MEWrapper &me, const QVariant &val);
+  void setName(const MEWrapper &me, const QString &name);
+  void setVal(const MEWrapper &me, const QVariant &val);
   void clear();
   void clearMe(const MEWrapper &me);
   void move(MEWrapper &me, MEWrapper &parent, int pos);
