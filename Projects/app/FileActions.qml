@@ -4,40 +4,40 @@ import QtQuick.Dialogs 1.2
 import MemoryManager 1.0
 
 Item {
-    id: root
-    property var memModel
+	id: root
+	property var memModel
 	// actionNew
 	property Action actionNew: Action {
 		id: actionNew
 		text: qsTr("New")
 		onTriggered: {
-            if(memModel.changed()) {
-                messageDialog.command = createNew
-                messageDialog.open()
-            }
+			if(memModel.changed()) {
+				messageDialog.command = createNew
+				messageDialog.open()
+			}
 			else {
 				createNew()
 			}
-        }
+		}
 	}
 
 	// actionOpen
 	property Action actionOpen: Action {
 		id: actionOpen
 		text: qsTr("Open")
-        onTriggered: {
-            if(memModel.changed()) {
-                messageDialog.command = showOpenDialog
-                messageDialog.open()
-            }
-            else {
-                showOpenDialog()
-            }
-        }
+		onTriggered: {
+			if(memModel.changed()) {
+				messageDialog.command = showOpenDialog
+				messageDialog.open()
+			}
+			else {
+				showOpenDialog()
+			}
+		}
 
-        function showOpenDialog() {
-            fileDialog.open()
-        }
+		function showOpenDialog() {
+			fileDialog.open()
+		}
 	}
 
 	// actionSave
@@ -45,12 +45,12 @@ Item {
 		id: actionSave
 		text: qsTr("Save")
 		onTriggered: {
-            if(memModel.filePath === "") {
-                fileSaveDialog.open()
-            }
-            else
-                memModel.save()
-        }
+			if(memModel.filePath === "") {
+				fileSaveDialog.open()
+			}
+			else
+				memModel.save()
+		}
 	}
 
 	// actionSaveAs
@@ -67,17 +67,17 @@ Item {
 		id: actionQuit
 		text: qsTr("Quit")
 		onTriggered: {
-            if(memModel.changed()) {
-                messageDialog.command = quitCommand
-                messageDialog.open()
-            }
-            else
-                quitCommand()
+			if(memModel.changed()) {
+				messageDialog.command = quitCommand
+				messageDialog.open()
+			}
+			else
+				quitCommand()
 		}
 
-        function quitCommand() {
-            Qt.quit()
-        }
+		function quitCommand() {
+			Qt.quit()
+		}
 	}
 
 	// Garbage collector action
@@ -88,48 +88,59 @@ Item {
 		}
 	}
 
-    OpenMemoryDialog {
-        id: fileDialog
-        memModel: root.memModel
+	// Test action
+	property Action actionTest: Action {
+		text: qsTr("Test")
+		onTriggered: {
+			var me = memModel.me
+			var me1 = memModel.selected
+			console.debug("!me: ", me.isNull())
+			console.debug("me==me1: ", me.uid==me1.uid)
+		}
 	}
 
-    SaveMemoryDialog {
-        id: fileSaveDialog
-        memModel: root.memModel
+	OpenMemoryDialog {
+		id: fileDialog
+		memModel: root.memModel
 	}
 
-    // Диалог запроса на сохранение
-    SaveMemoryMessageDialog {
-        id: messageDialog
+	SaveMemoryDialog {
+		id: fileSaveDialog
+		memModel: root.memModel
+	}
+
+	// Диалог запроса на сохранение
+	SaveMemoryMessageDialog {
+		id: messageDialog
 
 		onAccepted: {
-            doSave()
+			doSave()
 		}
 		onDiscard: {
-            doCommand()
-        }
+			doCommand()
+		}
 
-        function doSave() {
-            if(memModel.filePath === "") {
-                fileSaveDialog.saved.connect(saved)
-                fileSaveDialog.open()
-            }
-            else {
-                if(memModel.save()) {
-                    console.log("Memory saved.", memModel.filePath)
-                    doCommand()
-                }
-            }
-        }
+		function doSave() {
+			if(memModel.filePath === "") {
+				fileSaveDialog.saved.connect(saved)
+				fileSaveDialog.open()
+			}
+			else {
+				if(memModel.save()) {
+					console.log("Memory saved.", memModel.filePath)
+					doCommand()
+				}
+			}
+		}
 
 		function saved() {
-            fileSaveDialog.saved.disconnect(saved)
-            doCommand()
-        }
+			fileSaveDialog.saved.disconnect(saved)
+			doCommand()
+		}
 	}
 
 	function createNew() {
 		memModel.filePath = ""
 		memModel.clear()
-    }
+	}
 }

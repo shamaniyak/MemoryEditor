@@ -38,19 +38,17 @@ Item {
 
 			onNameChanged: {
 				var me = memModel.getMeByIndex(index)
-				if(me) {
+				if(!me.isNull()) {
 					if(memEditor)
 						memEditor.setName(me, newName)
 					else
 						me.name = newName
 				}
-				me = undefined
 			}
 
 			onClicked: {
 				var me = model.getMeByIndex(index)
 				model.selected = me
-				me = undefined
 			}
 		}
 

@@ -18,7 +18,7 @@ Item {
 
 	function showValue() {
 		//console.debug("selected = ", selected)
-		if(me != null && me.val != undefined)
+		if(!me.isNull() && me.val !== undefined)
 			edit.showText(me.val)
 		else
 			edit.showText("")
@@ -27,7 +27,7 @@ Item {
 	Connections {
 		target: root.memModel
 		onValueChanged: {
-			if(me==root.me)
+			if(me.uid === root.me.uid)
 				showValue()
 		}
 		onSelectedChanged: {
@@ -38,7 +38,7 @@ Item {
 	function doSave() {
 		//console.debug("doSave")
 		//console.trace()
-		if(me) {
+		if(!me.isNull()) {
 			if(memEditor)
 				memEditor.setVal(me, edit.text)
 			else

@@ -13,6 +13,7 @@ MenuBar {
 		MenuItem { text: qsTr("&Save"); action: actionsFile.actionSave }
 		MenuItem { text: qsTr("Save &As..."); action: actionsFile.actionSaveAs }
 		MenuItem { text: qsTr("Garbage Collector"); action: actionsFile.actionGC }
+		MenuItem { text: qsTr("Run Tests"); action: actionsFile.actionTest }
 		MenuSeparator { }
 		MenuItem { text: qsTr("&Quit"); action: actionsFile.actionQuit }
 	}

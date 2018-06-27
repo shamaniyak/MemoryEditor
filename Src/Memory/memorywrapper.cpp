@@ -318,7 +318,7 @@ QModelIndex MemoryWrapper::getIndexByMe(const MEWrapper &me)
   if(me == getME())
     return QModelIndex();
 
-  return createIndex(me.getIndex(), 0, me.getMe().get());
+  return createIndex(me.getIndex(), 0, me.getUid());
 }
 
 MEWrapper MemoryWrapper::getMeByIndex(const QModelIndex &index) const

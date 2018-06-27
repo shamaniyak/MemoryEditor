@@ -64,7 +64,7 @@ void MEWrapper::setMem(MemoryWrapper *mem)
   mem_ = mem;
 }
 
-void MEWrapper::deleteMe(MEWrapper &me)
+void MEWrapper::deleteMe(const MEWrapper &me)
 {
   if(!isNull())
     mem_->deleteMe(me);
@@ -149,7 +149,7 @@ void MEWrapper::delByI(int i)
   deleteMe(me);
 }
 
-void MEWrapper::delByMe(MEWrapper &me)
+void MEWrapper::delByMe(const MEWrapper &me)
 {
   deleteMe(me);
 }
@@ -186,6 +186,11 @@ bool MEWrapper::isNull() const
   if(me_ && mem_)
     return false;
   return(true);
+}
+
+uint MEWrapper::getUid() const
+{
+  return reinterpret_cast<uint>(me_.get());
 }
 
 MEWrapper &MEWrapper::operator =(const MEWrapper &src)

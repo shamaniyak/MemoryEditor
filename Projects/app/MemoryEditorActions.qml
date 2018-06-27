@@ -12,8 +12,10 @@ Item {
 		text: qsTr("&Add")
 		onTriggered: {
 			var me = memModel.getMeByIndex(treeView.currentIndex)
-			memEditor.add(me, "new", true);
-			me = undefined
+			if(memEditor)
+				memEditor.add(me, "new", true);
+			else
+				memModel.add(me, "new", true)
 		}
 	}
 	// removeAction
@@ -22,10 +24,12 @@ Item {
 		text: qsTr("&Del")
 		onTriggered: {
 			var me = memModel.getMeByIndex(treeView.currentIndex)
-			memEditor.deleteMe(me)
+			if(memEditor)
+				memEditor.deleteMe(me)
+			else
+				memModel.deleteMe(me)
 			memModel.selected = memModel.getMeByIndex(treeView.currentIndex)
 			//memModel.deleteMe(me)
-			me = undefined
 		}
 	}
 	// clearAction

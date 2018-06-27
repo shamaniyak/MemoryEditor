@@ -35,10 +35,14 @@ class MEMORY_EXPORT MEWrapper
 {
   Q_GADGET
   Q_PROPERTY(QString name READ name WRITE setName)
-  Q_PROPERTY(QString path READ getPath)
   Q_PROPERTY(QVariant val READ val WRITE setVal)
-//  Q_PROPERTY(QString path READ getPath)
-//  Q_PROPERTY(MEWrapper* parent READ parent)
+  Q_PROPERTY(QString path READ getPath)
+  Q_PROPERTY(int index READ getIndex)
+  Q_PROPERTY(int count READ count)
+  Q_PROPERTY(uint uid READ getUid)
+  Q_PROPERTY(MEWrapper parent READ parent)
+  Q_PROPERTY(MemoryWrapper* mem READ getMem)
+
 public:
   MEWrapper();
   MEWrapper(MemoryWrapper *mem);
@@ -58,16 +62,16 @@ public:
 
   QString getPath() const;
 
-  MEWrapper add(const QString &name, bool checkExist = true);
-  bool addFrom(MEWrapper &from, bool recurs = true);
+  Q_INVOKABLE MEWrapper add(const QString &name, bool checkExist = true);
+  Q_INVOKABLE bool addFrom(MEWrapper &from, bool recurs = true);
 
-  MEWrapper get(const QString &name);
-  MEWrapper getByI(int i);
+  Q_INVOKABLE MEWrapper get(const QString &name);
+  Q_INVOKABLE MEWrapper getByI(int i);
 
-  void del(const QString &name);
-  void delByI(int i);
-  void delByMe(MEWrapper &me);
-  void clear();
+  Q_INVOKABLE void del(const QString &name);
+  Q_INVOKABLE void delByI(int i);
+  Q_INVOKABLE void delByMe(const MEWrapper &me);
+  Q_INVOKABLE void clear();
 
   MEWrapper parent() const;
 
@@ -76,6 +80,8 @@ public:
   int getIndex() const;
 
   Q_INVOKABLE bool isNull() const;
+
+  uint getUid() const;
 
   explicit operator bool() const { return !isNull(); }
   bool operator !() const { return isNull(); }
@@ -87,7 +93,7 @@ public:
 
 protected:
   void setMem(MemoryWrapper *mem);
-  void deleteMe(MEWrapper &me);
+  void deleteMe(const MEWrapper &me);
 
 private:
   std::shared_ptr<Memory::TME> me_ = 0;
