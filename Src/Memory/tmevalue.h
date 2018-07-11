@@ -29,7 +29,7 @@ class TMEValue
 {
 public:
   TMEValue(const TMEValue &mev);
-  TMEValue(QVariant val=QVariant(0));
+  TMEValue(QVariant val=QVariant());
 
   TMEValue& operator=(const TMEValue &mev);
 
