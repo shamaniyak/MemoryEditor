@@ -41,6 +41,10 @@ ApplicationWindow {
 			var mct = eMemoryChange[ev.type]
 			console.log(mct, ev, ev.me)
 		}
+
+		Component.onCompleted: {
+			app.mem = memModel
+		}
 	}
 
 	// Диалог Редактора памяти

@@ -25,3 +25,14 @@ QString MyApp::urlToNativeFilePath(const QString &filePath)
   }
   return fName;
 }
+
+MemoryWrapper *MyApp::getMem() const
+{
+  return m_mem;
+}
+
+void MyApp::setMem(MemoryWrapper *mem)
+{
+  m_mem = mem;
+  emit memChanged();
+}
